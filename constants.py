@@ -16,6 +16,6 @@ gravityX = 0
 gravityY = 0
 gravityZ = -9.8
 maxForce = 50
-sleepTime = 1/100
+sleepTime = 1/1800
 joint_backLeg = "Torso_BackLeg"
 joint_frontLeg = "Torso_FrontLeg"
