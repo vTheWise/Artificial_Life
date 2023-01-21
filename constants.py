@@ -26,3 +26,4 @@ x1 = 0
 y1 = 0
 z1 = 0.5
 numberOfGenerations = 10
+populationSize = 10

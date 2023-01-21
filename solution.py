@@ -3,22 +3,29 @@ import constants as c
 import pyrosim.pyrosim as pyrosim
 import random
 import os
+import time
 
 class SOLUTION:
 
 
-    def __init__(self):
+    def __init__(self, ID):
         self.weights = np.random.rand(3,2)
         self.weights = (2 * self.weights) - 1
+        self.myID = ID
 
-    def Evaluate(self, directOrGUI):
+    def Start_Simulation(self, directOrGUI):
         self.Create_World()
         self.Generate_Body()
         self.Generate_Brain()
-        os.system("python3 simulate.py {0}".format(directOrGUI))
-        f = open("data/fitness.txt", "r")
+        os.system("python3 simulate.py {0} {1} &".format(directOrGUI, str(self.myID)))
+
+    def Wait_For_Simulation_To_End(self):
+        while not os.path.exists("data/fitness{0}.txt".format(str(self.myID))):
+            time.sleep(0.01)
+        f = open("data/fitness{0}.txt".format(str(self.myID)), "r")
         self.fitness = float(f.read())
         f.close()
+        os.system("rm ./data/fitness{0}.txt".format(str(self.myID)))
 
     def Create_World(self):
         pyrosim.Start_SDF("world.sdf")
@@ -35,7 +42,7 @@ class SOLUTION:
         pyrosim.End()
 
     def Generate_Brain(self):
-        pyrosim.Start_NeuralNetwork("brain.nndf")
+        pyrosim.Start_NeuralNetwork("brain{0}.nndf".format(self.myID))
         # Sensor Neurons
         pyrosim.Send_Sensor_Neuron(name=0, linkName="Torso")
         pyrosim.Send_Sensor_Neuron(name=1, linkName="BackLeg")
@@ -52,4 +59,8 @@ class SOLUTION:
         randomRow = random.randint(0,2)
         randomColumn = random.randint(0,1)
         self.weights[randomRow, randomColumn] = random.random() * 2 - 1
+
+    # def Set_ID(self):
+    #     self.myID += 1
+
 
