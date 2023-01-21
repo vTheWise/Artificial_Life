@@ -9,6 +9,7 @@ class MOTOR:
         self.jointName = jointName
 
     def Set_Value(self, robotId, desiredAngle):
+        print('desiredAngle::', desiredAngle)
         pyrosim.Set_Motor_For_Joint(
 
             bodyIndex=robotId,
