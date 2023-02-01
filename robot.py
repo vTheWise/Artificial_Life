@@ -11,12 +11,12 @@ class ROBOT:
     def __init__(self, solutionID):
         self.solutionID = solutionID
         self.motors = dict()
-        self.robotId = p.loadURDF("body.urdf")
+        self.robotId = p.loadURDF("data/body.urdf")
         pyrosim.Prepare_To_Simulate(self.robotId)
-        self.nn = NEURAL_NETWORK("brain{0}.nndf".format(str(self.solutionID)))
+        self.nn = NEURAL_NETWORK("data/brain{0}.nndf".format(str(self.solutionID)))
         self.Prepare_To_Sense()
         self.Prepare_To_Act()
-        os.system("rm brain{0}.nndf".format(str(self.solutionID)))
+        os.system("rm ./data/brain{0}.nndf".format(str(self.solutionID)))
 
 
     def Prepare_To_Sense(self):
@@ -32,7 +32,7 @@ class ROBOT:
         for jointName in pyrosim.jointNamesToIndices:
             self.motors[jointName] = MOTOR(jointName)
 
-    def Act(self, timeStep):
+    def Act(self):
         for neuronName in self.nn.Get_Neuron_Names():
             if self.nn.Is_Motor_Neuron(neuronName):
                 jointName = self.nn.Get_Motor_Neurons_Joint(neuronName)
@@ -42,14 +42,13 @@ class ROBOT:
 
     def Think(self):
         self.nn.Update()
-        #self.nn.Print()
 
     def Get_Fitness(self):
-        stateOfLinkZero = p.getLinkState(self.robotId,0)
-        positionOfLinkZero = stateOfLinkZero[0]
-        xCoordinateOfLinkZero = positionOfLinkZero[0]
+        basePositionAndOrientation = p.getBasePositionAndOrientation(self.robotId)
+        basePosition = basePositionAndOrientation[0]
+        xPosition = basePosition[0]
         with open('data/tmp{0}.txt'.format(str(self.solutionID)), 'w') as f:
-            f.write(str(xCoordinateOfLinkZero))
+            f.write(str(xPosition))
             f.close()
         os.system("mv data/tmp{0}.txt data/fitness{0}.txt".format(str(self.solutionID)))
 

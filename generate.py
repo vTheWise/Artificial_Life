@@ -8,15 +8,15 @@ x1 = 0
 y1 = 0
 z1 = 0.5
 
-def Create_World():
-    pyrosim.Start_SDF("world.sdf")
+def Generate_World():
+    pyrosim.Start_SDF("data/world.sdf")
 
     pyrosim.Send_Cube(name="Box", pos=[x1-2, y1+2, z1] , size=[length,width,height])
 
     pyrosim.End()
 
 def Generate_Body():
-    pyrosim.Start_URDF("body.urdf")
+    pyrosim.Start_URDF("data/body.urdf")
 
     pyrosim.Send_Cube(name="Torso", pos=[1.5, 0, 1.5], size=[length, width, height])
     pyrosim.Send_Joint(name="Torso_BackLeg", parent="Torso", child="BackLeg", type="revolute", position=[1, 0, 1])
@@ -27,7 +27,7 @@ def Generate_Body():
     pyrosim.End()
 
 def Generate_Brain():
-    pyrosim.Start_NeuralNetwork("brain.nndf")
+    pyrosim.Start_NeuralNetwork("data/brain.nndf")
 
     #Sensor Neurons
     pyrosim.Send_Sensor_Neuron(name=0, linkName="Torso")
@@ -52,7 +52,7 @@ def Generate_Brain():
 
     pyrosim.End()
 
-Create_World()
+Generate_World()
 
 Generate_Body()
 

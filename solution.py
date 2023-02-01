@@ -16,9 +16,9 @@ class SOLUTION:
     def Start_Simulation(self, directOrGUI):
         if self.myID == 0:
             self.Create_World()
-            self.Generate_Body()
-        self.Generate_Brain()
-        os.system("python3 simulate.py {0} {1} 2&>1 &".format(directOrGUI, str(self.myID)))
+            self.Create_Body()
+        self.Create_Brain()
+        os.system("python3 simulate.py {0} {1} 2&>runLogs &".format(directOrGUI, str(self.myID)))
 
     def Wait_For_Simulation_To_End(self):
         while not os.path.exists("data/fitness{0}.txt".format(str(self.myID))):
@@ -29,12 +29,12 @@ class SOLUTION:
         os.system("rm ./data/fitness{0}.txt".format(str(self.myID)))
 
     def Create_World(self):
-        pyrosim.Start_SDF("world.sdf")
+        pyrosim.Start_SDF("data/world.sdf")
         pyrosim.Send_Cube(name="Box", pos=[c.x1 - 2, c.y1 + 2, c.z1], size=[c.length, c.width, c.height])
         pyrosim.End()
 
-    def Generate_Body(self):
-        pyrosim.Start_URDF("body.urdf")
+    def Create_Body(self):
+        pyrosim.Start_URDF("data/body.urdf")
         pyrosim.Send_Cube(name="Torso", pos=[0, 0, 1], size=[c.length, c.width, c.height])
         pyrosim.Send_Joint(name="Torso_BackLeg", parent="Torso", child="BackLeg", type="revolute", position=[0, -0.5, 1], jointAxis = "1 0 0")
         pyrosim.Send_Cube(name="BackLeg", pos=[0, -0.5, 0], size=[c.leg_length, c.leg_width, c.leg_height])
@@ -64,8 +64,8 @@ class SOLUTION:
                           size=[c.lower_leg_length, c.lower_leg_width, c.lower_leg_height])
         pyrosim.End()
 
-    def Generate_Brain(self):
-        pyrosim.Start_NeuralNetwork("brain{0}.nndf".format(self.myID))
+    def Create_Brain(self):
+        pyrosim.Start_NeuralNetwork("data/brain{0}.nndf".format(self.myID))
         # Sensor Neurons
         # pyrosim.Send_Sensor_Neuron(name=0, linkName="Torso")
         # pyrosim.Send_Sensor_Neuron(name=1, linkName="BackLeg")
@@ -95,7 +95,7 @@ class SOLUTION:
         randomColumn = random.randint(0,c.numMotorNeurons-1)
         self.weights[randomRow, randomColumn] = random.random() * 2 - 1
 
-    # def Set_ID(self):
-    #     self.myID += 1
+    def Set_ID(self, nextAvailableID):
+        self.myID = nextAvailableID + 1
 
 
