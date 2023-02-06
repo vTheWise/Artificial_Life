@@ -32,9 +32,11 @@ When the program is run, a simulation window will pop-up showing the fifth creat
 
 **Steps**
 ```
-> 1. Clone this branch or download the code (zip file)
-> 2. Unzip the file and navigate to the folder: 'Artificial_Life'
-> 3. Either run "search.py" directly using any IDE or run the following command on your terminal:
+1. Clone this branch or download the code (zip file)
+2. Unzip the file and navigate to the folder: 'Artificial_Life'
+3. Either run "search.py" directly using any IDE or run the following command on your terminal:
+```
+
     ```
     python search.py
     ```
@@ -42,11 +44,9 @@ When the program is run, a simulation window will pop-up showing the fifth creat
     ```
     python3 search.py
     ```
-```
-    
+
 ## References:
-```
-1. [Northwestern University - COMP_SCI 396: Artificial Life](https://www.mccormick.northwestern.edu/computer-science/academics/courses/descriptions/396-2.html) 
-2. [Education in Evolutionary Robotics](https://www.reddit.com/r/ludobots/wiki/)
+1. [Northwestern University - COMP_SCI 396: Artificial Life](https://www.mccormick.northwestern.edu/computer-science/academics/courses/descriptions/396-2.html). 
+2. [Education in Evolutionary Robotics](https://www.reddit.com/r/ludobots/wiki/). 
 3. [Pyrosim](https://github.com/jbongard/pyrosim.git) (allows us to more easily send information to pybullet, and get information back from it)
-```
+
