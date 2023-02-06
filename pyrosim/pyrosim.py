@@ -49,14 +49,14 @@ def Get_Touch_Sensor_Value_For_Link(linkName):
     desiredLinkIndex = linkNamesToIndices[linkName]
 
     pts = p.getContactPoints()
+    if pts !=  None:
+        for pt in pts:
 
-    for pt in pts:
+            linkIndex = pt[4]
 
-        linkIndex = pt[4]
+            if ( linkIndex == desiredLinkIndex ):
 
-        if ( linkIndex == desiredLinkIndex ):
-
-            touchValue = 1.0
+                touchValue = 1.0
 
     return touchValue
 
@@ -106,32 +106,30 @@ def Prepare_To_Simulate(bodyID):
 
     Prepare_Joint_Dictionary(bodyID)
 
-def Send_Cube(name="default",pos=[0,0,0],size=[1,1,1]):
+def Send_Sphere(name="default",pos=[0,0,0],size=[0.5], color="Gray",rgba="0.5 0.5 0.5 1.0"):
+    Send_Link(name,pos,size,"sphere", color, rgba)
 
+def Send_Cube(name="default", pos=[0,0,0], size=[1,1,1], color="Gray",rgba="0.5 0.5 0.5 1.0"):
+    Send_Link(name, pos, size, "box", color, rgba)
+
+def Send_Link(name, pos, size, shape, color="Gray",rgba="0.5 0.5 0.5 1.0"):
     global availableLinkIndex
-
     global links
 
     if filetype == SDF_FILETYPE:
-
-        Start_Model(name,pos)
-
-        link = LINK_SDF(name,pos,size)
-
+        Start_Model(name, pos)
+        link = LINK_SDF(name, pos, size, shape)
         links.append(link)
     else:
-        link = LINK_URDF(name,pos,size)
-
+        link = LINK_URDF(name, pos, size, shape, color, rgba)
         links.append(link)
 
     link.Save(f)
 
     if filetype == SDF_FILETYPE:
-
         End_Model()
 
     linkNamesToIndices[name] = availableLinkIndex
-
     availableLinkIndex = availableLinkIndex + 1
 
 def Send_Joint(name,parent,child,type,position, jointAxis):

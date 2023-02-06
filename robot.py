@@ -8,15 +8,15 @@ import constants as c
 
 class ROBOT:
 
-    def __init__(self, solutionID):
+    def __init__(self, solutionID, robotNumber):
         self.solutionID = solutionID
         self.motors = dict()
-        self.robotId = p.loadURDF("data/body.urdf")
+        self.robotId = p.loadURDF("data/body{0}.urdf".format(robotNumber))
         pyrosim.Prepare_To_Simulate(self.robotId)
-        self.nn = NEURAL_NETWORK("data/brain{0}.nndf".format(str(self.solutionID)))
+        self.nn = NEURAL_NETWORK("data/brain{0}_{1}.nndf".format(str(self.solutionID), str(robotNumber)))
         self.Prepare_To_Sense()
         self.Prepare_To_Act()
-        os.system("rm ./data/brain{0}.nndf".format(str(self.solutionID)))
+        os.system("rm ./data/brain{0}_{1}.nndf".format(str(self.solutionID), str(robotNumber)))
 
 
     def Prepare_To_Sense(self):
@@ -46,9 +46,6 @@ class ROBOT:
     def Get_Fitness(self):
         basePositionAndOrientation = p.getBasePositionAndOrientation(self.robotId)
         basePosition = basePositionAndOrientation[0]
-        xPosition = basePosition[0]
-        with open('data/tmp{0}.txt'.format(str(self.solutionID)), 'w') as f:
-            f.write(str(xPosition))
-            f.close()
-        os.system("mv data/tmp{0}.txt data/fitness{0}.txt".format(str(self.solutionID)))
+        return basePosition
+
 
