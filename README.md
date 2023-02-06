@@ -1,8 +1,8 @@
 # Artificial_Life -> roboBall
 
-In this version, I have created a blue-green biped creature using pybullet and pyrosim. The blue color indicates the links without any sensor and the green color indicates the links with a touch sensor. Additionally, there is a spehrical ball in this environment too.
-The creature is evolved to get closer to the ball.
-The fitness criterion used for evolution is **the distance between the robot's root link and the ball.** To calculate this distance, I have first fetched the position of the robot and ball using pybullet's *getBasePositionAndOrientation* function. This function returns a tuple of tuple, in which the first tuple contains the xyz-coordinates of the corresponding object. 
+In this version, I have created a blue-green biped creature using pybullet and pyrosim. The blue color indicates the links without any sensor and the green color indicates the links with a touch sensor. Additionally, there is a spherical ball in this environment too.
+The creature evolved to get closer to the ball, using its distance from the ball as the fitness criterion.
+To calculate this distance, I have first fetched the position of the robot and ball using pybullet's *getBasePositionAndOrientation* function. This function returns a tuple of tuple, in which the first tuple contains the xyz-coordinates of the corresponding object. 
 Let's say the position of robot is pos1: [x1, y1, z1] and the position of ball is pos2: [x2, y2, z2], then the distance between the two can be calculated using Euclidean method: (I've ignored the z-axis since it was not relevant for our creature's movement)
 
 ```
