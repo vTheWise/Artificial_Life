@@ -37,13 +37,15 @@ When the program is run, a simulation window will pop-up showing the fifth creat
 3. Either run "search.py" directly using any IDE or run the following command on your terminal:
 ```
 
-    ```
-    python search.py
-    ```
-    OR
-    ```
-    python3 search.py
-    ```
+```
+python search.py
+```
+
+OR 
+
+```
+python3 search.py
+```
 
 ## References:
 1. [Northwestern University - COMP_SCI 396: Artificial Life](https://www.mccormick.northwestern.edu/computer-science/academics/courses/descriptions/396-2.html). 
