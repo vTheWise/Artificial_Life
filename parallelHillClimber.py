@@ -2,15 +2,12 @@ from solution import SOLUTION
 import constants as c
 import copy
 import os
-import random
-import math
-import numpy as np
 
 
 class PARALLEL_HILL_CLIMBER:
     def __init__(self):
         for file in os.listdir("./data"):
-            if file.startswith("fitness") or file.startswith("brain") or file.startswith("body"):
+            if file.startswith("fitness") or file.startswith("brain"):
                 os.system("rm ./data/{0}".format(file))
 
         self.parents = dict()
@@ -47,41 +44,30 @@ class PARALLEL_HILL_CLIMBER:
             self.children[k].Mutate()
 
     def Select(self):
-        parent_fitness = 0
-        children_fitness = 0
         for k, v in self.parents.items():
-            print('hi::', self.parents[k].fitness)
-            for idx in range(c.numRobots):
-                parent_fitness += self.parents[k].fitness[idx]
-                children_fitness += self.children[k].fitness[idx]
-            print('parent_fitness::', parent_fitness)
-            print('children_fitness::', children_fitness)
-            if parent_fitness > children_fitness:
+            if self.children[k].fitness < self.parents[k].fitness:
                 self.parents[k] = self.children[k]
 
     def Print(self):
         for k, v in self.parents.items():
-            for idx in range(c.numRobots):
-                print('\nrobot::', idx, ' ', 'parent fitness::', self.parents[k].fitness[idx],
-                      'child fitness::', self.children[k].fitness[idx])
+            print('\nparent fitness::', self.parents[k].fitness,
+                  'child fitness::', self.children[k].fitness)
 
     def Show_Best(self):
         desired_fitness = 10000
-        parent_fitness = 0
         best_solution = self.parents[list(self.parents.keys())[0]]
         for k, v in self.parents.items():
-            for idx in range(c.numRobots):
-                parent_fitness += self.parents[k].fitness[idx]
-            if parent_fitness < desired_fitness:
-                desired_fitness = parent_fitness
+            print('Solution Fitness::', self.parents[k].fitness)
+            if self.parents[k].fitness < desired_fitness:
+                desired_fitness = self.parents[k].fitness
                 best_solution = self.parents[k]
+        print('BEST Solution Fitness::', best_solution.fitness)
         best_solution.Start_Simulation("GUI")
         best_solution.Wait_For_Simulation_To_End()
 
     def Evaluate(self, solutions, generation):
-        random_index = random.randint(0, math.floor(c.populationSize / 2))
         for p_size in range(c.populationSize):
-            if generation == 'parents' and p_size == random_index:
+            if generation == 'parents' and p_size ==5:
                 solutions[p_size].Start_Simulation("GUI")
             else:
                 solutions[p_size].Start_Simulation("DIRECT")

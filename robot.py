@@ -5,18 +5,19 @@ from motor import MOTOR
 from pyrosim.neuralNetwork import NEURAL_NETWORK
 import os
 import constants as c
+import numpy as np
 
 class ROBOT:
 
-    def __init__(self, solutionID, robotNumber):
+    def __init__(self, solutionID):
         self.solutionID = solutionID
         self.motors = dict()
-        self.robotId = p.loadURDF("data/body{0}.urdf".format(robotNumber))
+        self.robotId = p.loadURDF("data/body.urdf")
         pyrosim.Prepare_To_Simulate(self.robotId)
-        self.nn = NEURAL_NETWORK("data/brain{0}_{1}.nndf".format(str(self.solutionID), str(robotNumber)))
+        self.nn = NEURAL_NETWORK("data/brain{0}.nndf".format(str(self.solutionID)))
         self.Prepare_To_Sense()
         self.Prepare_To_Act()
-        os.system("rm ./data/brain{0}_{1}.nndf".format(str(self.solutionID), str(robotNumber)))
+        os.system("rm ./data/brain{0}.nndf".format(str(self.solutionID)))
 
 
     def Prepare_To_Sense(self):
@@ -43,9 +44,21 @@ class ROBOT:
     def Think(self):
         self.nn.Update()
 
-    def Get_Fitness(self):
+    def Get_Fitness(self, ballId):
         basePositionAndOrientation = p.getBasePositionAndOrientation(self.robotId)
         basePosition = basePositionAndOrientation[0]
-        return basePosition
+
+        ball_orientation = p.getBasePositionAndOrientation(ballId)
+        ball_position = ball_orientation[0]
+
+        dist = self.__dist(ball_position, basePosition)
+
+        with open('data/tmp{0}.txt'.format(str(self.solutionID)), 'w') as f:
+            f.write(str(dist))
+            f.close()
+        os.system("mv data/tmp{0}.txt data/fitness{0}.txt".format(str(self.solutionID)))
+
+    def __dist(self, pos1, pos2):
+        return np.sqrt((pos1[0] - pos2[0]) ** 2 + (pos1[1] - pos2[1]) ** 2)
 
 
