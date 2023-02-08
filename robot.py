@@ -48,7 +48,7 @@ class ROBOT:
         basePosition = basePositionAndOrientation[0]
         xPosition = basePosition[0]
         with open('data/tmp{0}.txt'.format(str(self.solutionID)), 'w') as f:
-            f.write(str(xPosition))
+            f.write(str(-1 * xPosition))
             f.close()
         os.system("mv data/tmp{0}.txt data/fitness{0}.txt".format(str(self.solutionID)))
 
