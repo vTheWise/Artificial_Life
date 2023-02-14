@@ -50,17 +50,17 @@ class SOLUTION:
         xpos = 0
         ypos = 0
         zpos = 1
-        xsize = random.random() * 0.5
-        ysize = random.random() * 0.5
-        zsize = random.random() * 0.5
+        xsize = random.random() * 0.5 + 0.125
+        ysize = random.random() * 0.5 + 0.125
+        zsize = random.random() * 0.5 + 0.125
         if self.sensorVal[0] == 0: # no sensor
-            pyrosim.Send_Cube(name="Link0", pos=[xpos, ypos, 1], size=[xsize*2, ysize*2, zsize*2],
+            pyrosim.Send_Cube(name="Link0", pos=[xpos, ypos, 0.625], size=[xsize*2, ysize*2, zsize*2],
                               color=c.color_nosensor_link, rgba=c.rgba_nosensor_link)
         else:
-            pyrosim.Send_Cube(name="Link0", pos=[xpos, ypos, 1], size=[xsize*2, ysize*2, zsize*2],
+            pyrosim.Send_Cube(name="Link0", pos=[xpos, ypos, 0.625], size=[xsize*2, ysize*2, zsize*2],
                               color=c.color_sensor_link, rgba=c.rgba_sensor_link)
         pyrosim.Send_Joint(name="Link0_Link1", parent="Link0", child="Link1", type="revolute",
-                           position=[0, ysize, 1], jointAxis="1 0 0")
+                           position=[0, ysize, 0.625], jointAxis="1 0 0")
 
         # loop through numLinks to create the rest of the links
         for i in range(1, self.numLinks):
@@ -72,9 +72,9 @@ class SOLUTION:
                                    parent="Link{0}".format(str(i-1)), child="Link{0}".format(str(i)),
                                    type="revolute", position=[0, ysize*2, 0], jointAxis="1 0 0")
 
-            xsize = random.random() * 0.5
-            ysize = random.random() * 0.5
-            zsize = random.random() * 0.5
+            xsize = random.random() * 0.5 + 0.125
+            ysize = random.random() * 0.5 + 0.125
+            zsize = random.random() * 0.5 + 0.125
             if self.sensorVal[i] == 0: #no sensor
                 pyrosim.Send_Cube(name="Link{0}".format(str(i)), pos=[0, ysize, 0],
                                   size=[xsize*2, ysize*2, zsize*2],

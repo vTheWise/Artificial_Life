@@ -14,6 +14,7 @@ class SIMULATION:
                 self.physicsClient = p.connect(p.DIRECT)
             elif directOrGUI == 'GUI':
                 self.physicsClient = p.connect(p.GUI)
+                p.configureDebugVisualizer(p.COV_ENABLE_GUI, 0)
             else:
                 raise ValueError('Incorrect Mode!! Please choose "DIRECT" or "GUI".')
         except Exception as error:
