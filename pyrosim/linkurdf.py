@@ -12,7 +12,7 @@ from pyrosim.commonFunctions import Save_Whitespace
 
 class LINK_URDF:
 
-    def __init__(self,name,pos,size, shape, color="Gray", rgba="0.5 0.5 0.5 1.0"):
+    def __init__(self,name,pos,size, shape, color="Gray", rgba="0.5 0.5 0.5 1.0",mass=1.0):
 
         self.name = name
 
@@ -20,7 +20,7 @@ class LINK_URDF:
 
         self.origin   = ORIGIN_URDF(pos)
 
-        self.inertial  = INERTIAL_URDF(self.origin)
+        self.inertial  = INERTIAL_URDF(self.origin,mass)
 
         self.geometry = GEOMETRY_URDF(size, shape)
 

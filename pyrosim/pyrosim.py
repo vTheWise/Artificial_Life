@@ -106,22 +106,22 @@ def Prepare_To_Simulate(bodyID):
 
     Prepare_Joint_Dictionary(bodyID)
 
-def Send_Sphere(name="default",pos=[0,0,0],size=[0.5], color="Gray",rgba="0.5 0.5 0.5 1.0"):
-    Send_Link(name,pos,size,"sphere", color, rgba)
+def Send_Sphere(name="default",pos=[0,0,0],size=[0.5], color="Gray",rgba="0.5 0.5 0.5 1.0",mass=1.0):
+    Send_Link(name,pos,size,"sphere", color, rgba,mass)
 
-def Send_Cube(name="default", pos=[0,0,0], size=[1,1,1], color="Gray",rgba="0.5 0.5 0.5 1.0"):
-    Send_Link(name, pos, size, "box", color, rgba)
+def Send_Cube(name="default", pos=[0,0,0], size=[1,1,1], color="Gray",rgba="0.5 0.5 0.5 1.0",mass=1.0):
+    Send_Link(name, pos, size, "box", color, rgba,mass)
 
-def Send_Link(name, pos, size, shape, color="Gray",rgba="0.5 0.5 0.5 1.0"):
+def Send_Link(name, pos, size, shape, color="Gray",rgba="0.5 0.5 0.5 1.0", mass=1.0):
     global availableLinkIndex
     global links
 
     if filetype == SDF_FILETYPE:
         Start_Model(name, pos)
-        link = LINK_SDF(name, pos, size, shape)
+        link = LINK_SDF(name, pos, size, shape,mass)
         links.append(link)
     else:
-        link = LINK_URDF(name, pos, size, shape, color, rgba)
+        link = LINK_URDF(name, pos, size, shape, color, rgba,mass)
         links.append(link)
 
     link.Save(f)

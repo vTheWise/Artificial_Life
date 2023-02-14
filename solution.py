@@ -4,6 +4,7 @@ import pyrosim.pyrosim as pyrosim
 import random
 import os
 import time
+import math
 
 class SOLUTION:
 
@@ -55,10 +56,12 @@ class SOLUTION:
         zsize = random.random() * 0.5 + 0.125
         if self.sensorVal[0] == 0: # no sensor
             pyrosim.Send_Cube(name="Link0", pos=[xpos, ypos, 0.625], size=[xsize*2, ysize*2, zsize*2],
-                              color=c.color_nosensor_link, rgba=c.rgba_nosensor_link)
+                              color=c.color_nosensor_link, rgba=c.rgba_nosensor_link,
+                              mass=math.pow(xsize*2*ysize*2*zsize*2,1/3))
         else:
             pyrosim.Send_Cube(name="Link0", pos=[xpos, ypos, 0.625], size=[xsize*2, ysize*2, zsize*2],
-                              color=c.color_sensor_link, rgba=c.rgba_sensor_link)
+                              color=c.color_sensor_link, rgba=c.rgba_sensor_link,
+                              mass=math.pow(xsize*2*ysize*2*zsize*2,1/3))
         pyrosim.Send_Joint(name="Link0_Link1", parent="Link0", child="Link1", type="revolute",
                            position=[0, ysize, 0.625], jointAxis="1 0 0")
 
@@ -78,11 +81,13 @@ class SOLUTION:
             if self.sensorVal[i] == 0: #no sensor
                 pyrosim.Send_Cube(name="Link{0}".format(str(i)), pos=[0, ysize, 0],
                                   size=[xsize*2, ysize*2, zsize*2],
-                                  color=c.color_nosensor_link, rgba=c.rgba_nosensor_link)
+                                  color=c.color_nosensor_link, rgba=c.rgba_nosensor_link,
+                                  mass=math.pow(xsize*2*ysize*2*zsize*2,1/3))
             else:
                 pyrosim.Send_Cube(name="Link{0}".format(str(i)), pos=[0, ysize, 0],
                                   size=[xsize*2, ysize*2, zsize*2],
-                                  color=c.color_sensor_link, rgba=c.rgba_sensor_link)
+                                  color=c.color_sensor_link, rgba=c.rgba_sensor_link,
+                                  mass=math.pow(xsize*2*ysize*2*zsize*2,1/3))
         pyrosim.End()
 
     def Create_Brain(self):
