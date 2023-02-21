@@ -18,6 +18,10 @@ The world is currently empty with no objects present in it except for a 3D plane
 
 ### Creature - Body
 
+The creatures in our random3D world are created using cuboids of random dimensions. 
+
+![Cuboid faces and the corresponding direction vectors](https://github.com/vTheWise/Artificial_Life/blob/random3D/Cube_Faces.jpg?raw=true)
+
 ### Creature - Brain
 
 ### Creature - Movement
