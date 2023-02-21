@@ -10,7 +10,7 @@ def RemoveOldFiles():
 
 def RunSimulation():
     nextAvailableID = 0
-    for i in range(c.numSnakes):
+    for i in range(c.numCreatures):
         sol = SOLUTION(nextAvailableID)
         nextAvailableID += 1
         sol.Start_Simulation('GUI')
