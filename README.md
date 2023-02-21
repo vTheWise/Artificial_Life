@@ -33,6 +33,10 @@ Our creatures contain a brain-like structure consisting of a neural network with
 
 ### Creature - Movement
 
+Our creatures possess hinge joints of "revolution" type, each of which allows for free movement in 2 axes. If the link is generated alongside z-axis (direction: [0, 0, 1] or [0, 0, -1]), then the joints on this link can move along the x-y plane. Similarly, if the link is generated alongside y-axis, the movement is allowed along the x-z plane. And, for the links generated alongside x-axis, free movement is allowed along the y-z plane. The placement of joints can be better understood with the help of the following diagram: [source](https://docs.google.com/presentation/d/1zvZzFyTf8PBNjzQZx_gZk84aUntZo2bUKhpe78yT4OY/edit#slide=id.g10dad2fba23_2_428)
+
+![Cuboid faces and the corresponding direction vectors](https://github.com/vTheWise/Artificial_Life/blob/random3D/Diagrams/Joints Position.png?raw=true)
+
 ## Demo
 [Link to Youtube Video]
 
