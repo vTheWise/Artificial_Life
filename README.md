@@ -39,9 +39,12 @@ Our creatures possess hinge joints of "revolution" type, each of which allows fo
 
 If the link is generated alongside z-axis (direction: [0, 0, 1] or [0, 0, -1]), then the joints on this link can move along the x-y plane. Similarly, if the link is generated alongside y-axis, the movement is allowed along the x-z plane. And, for the links generated alongside x-axis, free movement is allowed along the y-z plane. 
 
-The movement of the joints can be understood with the help of this diagram:
+The movement of the joints can be understood with the help of these diagrams:
 
 ![Cuboid faces and the corresponding direction vectors](https://github.com/vTheWise/Artificial_Life/blob/random3D/Diagrams/Link_Movement.png?raw=true)
+
+![Cuboid faces and the corresponding direction vectors](https://github.com/vTheWise/Artificial_Life/blob/random3D/Diagrams/MovementGif.gif?raw=true)
+
 
 ## Demo
 [Link to Youtube Video]
