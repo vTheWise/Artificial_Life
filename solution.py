@@ -77,13 +77,13 @@ class SOLUTION:
         else:
             color = c.color_nosensor_link
             rgba = c.rgba_nosensor_link
-        pyrosim.Send_Cube(name="Link{0}".format(self.currLink), pos=[0, 0, 0.625], size=dim*2, color=color, rgba=rgba,
+        pyrosim.Send_Cube(name="Link{0}".format(self.currLink), pos=[0, 0, 0.325], size=dim*2, color=color, rgba=rgba,
                           mass=np.prod(dim))
         self.currLink += 1
 
         # recursion for rest of the body
-        self.Create_Body_Rec(parentLink=self.currLink - 1, jointPos=[0+dim[0], 0, 0.625],
-                             currDirection=[1, 0, 0], height=0.625+dim[2])
+        self.Create_Body_Rec(parentLink=self.currLink - 1, jointPos=[0+dim[0], 0, 0.325],
+                             currDirection=[1, 0, 0], height=0.325+dim[2])
 
         pyrosim.End()
 
@@ -92,7 +92,7 @@ class SOLUTION:
         if self.currLink == self.maxNumLinks:
             return
         # check if the limb is underground
-        if height < 0.625:
+        if height < 0.325:
             return
 
         # create joint from the parentLink to a new link
@@ -198,7 +198,7 @@ class SOLUTION:
     Returns a random array of shape 3X1 with the values in the specified range
     '''
     def Get_Dimensions(self):
-        return np.random.rand(3) * 0.5 + 0.125
+        return np.random.rand(3) * 0.2 + 0.125
 
 
 
