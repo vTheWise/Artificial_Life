@@ -18,6 +18,13 @@ The world is currently empty with no objects present in it except for a 3D plane
 
 ### Creature - Body
 
+The creatures in our random3D world are created using cuboids of random dimensions. 
+
+![Cuboid faces and the corresponding direction vectors](https://github.com/vTheWise/Artificial_Life/blob/random3D/Cube_Faces.jpg?raw=true)
+
+The limbs of the creatures are added randomly with the help of a couple of probability thresholds and random number generating functions.
+The variable **self.probExtend** in Solution.py acts as a probability threshold to determine whether the next link will be created on the same face. Similarly another variable **self.probSwitchFace** in the same class works as a probability threshold to determine whether the next link will be created in a different face. A dictionary **self.probNextFace** is defined with the directions (such as, [1,0,0] for front face, [0,-1,0] for left face, etc.) as the keys and a list of self.probExtend and self.probSwitchFace variables as values. The probability of extending in the opposite face is 0. So, if the current link is generated on the front face, the next link cannot be generated in the back face. Similarly, if the current link was generated on the left face, the next link cannot be generated on the right face. This rule preserves the natural growth of the creature avoiding link-intersections and link-pooling.
+
 ### Creature - Brain
 
 ### Creature - Movement
@@ -60,7 +67,7 @@ python3 search.py
 
 
 ## References:
-1. This implementation was done as an assignment for the following MSAI course (Winter 2023): [Northwestern University - COMP_SCI 396: Artificial Life](https://www.mccormick.northwestern.edu/computer-science/academics/courses/descriptions/396-2.html). The instructor for this course is: [Dr. Sam Kriegman](https://skriegman.github.io/).
+1. This implementation is done as an assignment for the following MSAI course (Winter 2023): [Northwestern University - COMP_SCI 396: Artificial Life](https://www.mccormick.northwestern.edu/computer-science/academics/courses/descriptions/396-2.html). The instructor for this course is: [Dr. Sam Kriegman](https://skriegman.github.io/).
 2. This assignment is built on top of the fundamental components developed as a part of an awesome course designed by [Prof. Josh Bongard](https://jbongard.github.io/). The course can be found on reddit: [Education in Evolutionary Robotics](https://www.reddit.com/r/ludobots/wiki/). 
 3. This repository has forked and modded a version of [Pyrosim](https://github.com/jbongard/pyrosim.git). Pyrosim allows us to more easily send information to pybullet, and get information back from it.
 
