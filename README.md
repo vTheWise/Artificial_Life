@@ -22,6 +22,9 @@ The creatures in our random3D world are created using cuboids of random dimensio
 
 ![Cuboid faces and the corresponding direction vectors](https://github.com/vTheWise/Artificial_Life/blob/random3D/Cube_Faces.jpg?raw=true)
 
+The limbs of the creatures are added randomly with the help of a couple of probability thresholds and random number generating functions.
+The variable **self.probExtend** in Solution.py acts as a probability threshold to determine whether the next link will be created on the same face. Similarly another variable **self.probSwitchFace** in the same class works as a probability threshold to determine whether the next link will be created in a different face. A dictionary **self.probNextFace** is defined with the directions (such as, [1,0,0] for front face, [0,-1,0] for left face, etc.) as the keys and a list of self.probExtend and self.probSwitchFace variables as values. The probability of extending in the opposite face is 0. So, if the current link is generated on the front face, the next link cannot be generated in the back face. Similarly, if the current link was generated on the left face, the next link cannot be generated on the right face. This rule preserves the natural growth of the creature avoiding link-intersections and link-pooling.
+
 ### Creature - Brain
 
 ### Creature - Movement
