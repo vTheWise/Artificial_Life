@@ -198,7 +198,11 @@ class SOLUTION:
     Returns a random array of shape 3X1 with the values in the specified range
     '''
     def Get_Dimensions(self):
-        return np.random.rand(3) * 0.2 + 0.125
+        dims = np.random.rand(3)
+        dims[1] *= 1.1
+        dims[0] *= 1.1
+        dims[2] = dims[2] * 0.2 + 0.125
+        return  dims
 
 
 
