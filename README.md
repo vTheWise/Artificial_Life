@@ -52,6 +52,8 @@ The movement of the joints can be understood with the help of these diagrams:
 
 ![Movement Gif](https://github.com/vTheWise/Artificial_Life/blob/random3D/Diagrams/MovementGif.gif?raw=true)
 
+![Movement Sample](https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOWQ3NmVkY2M0ZWVjY2E3YWFkNDlkZjAxMTIzMjY2MjhlMGFiNWFiNSZjdD1n/N7LBZXHyhtQRicUhzE/giphy.gif)
+
 
 ## Demo
 [Link to Youtube Video](https://youtube.com/shorts/GbT6Caj4Cys?feature=share)
