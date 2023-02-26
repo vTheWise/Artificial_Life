@@ -88,7 +88,7 @@ class PARALLEL_HILL_CLIMBER:
 
     def Evaluate(self, solutions, generation):
         for p_size in range(c.populationSize):
-            if generation == 'parents' and self.nextAvailableID < c.populationSize:
+            if generation == 'parents' and self.nextAvailableID == c.populationSize:
                 solutions[p_size].Start_Simulation("GUI")
             else:
                 solutions[p_size].Start_Simulation("DIRECT")
