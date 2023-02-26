@@ -15,8 +15,8 @@ np.random.seed(42)
 # constants
 SPIDER_LEG_TYPE = 'spider'
 QUADRUPED_LEG_TYPE = 'quadruped'
-CREATURE_SNAKE = 'snake'
-CREATURE_HORSE = 'horse'
+CREATURE_REPTILE = 'reptile'
+CREATURE_MAMMAL = 'mammal'
 #endregion File Attributes
 
 class SOLUTION:
@@ -86,7 +86,7 @@ class SOLUTION:
         links, joints = {}, {}
         num_limbs = random.randint(2, 8)
         limb_width_range, link_length_rage = (0.1, 0.5), (0.1, 0.5)
-        creature_inspired_by = random.choice([CREATURE_SNAKE, CREATURE_HORSE])
+        creature_inspired_by = random.choice([CREATURE_REPTILE, CREATURE_MAMMAL])
         leg_type = random.choice([SPIDER_LEG_TYPE, QUADRUPED_LEG_TYPE])
         leg_width_range, leg_length_range = (0.1, 0.3), (0.2, 0.6)
 
@@ -140,10 +140,10 @@ class SOLUTION:
                     pos_x, pos_y, pos_z = links[parent]["size"][0], 0, links[parent]["pos"][2]
                 else: # relative position
                     pos_x, pos_y, pos_z = links[parent]["size"][0], 0, 0
-                if creature_inspired_by == CREATURE_SNAKE:
+                if creature_inspired_by == CREATURE_REPTILE:
                     # can move in x-y plane
                     joint_axis = "0 0 1"
-                elif creature_inspired_by == CREATURE_HORSE:
+                elif creature_inspired_by == CREATURE_MAMMAL:
                     # can move in x-z plane
                     joint_axis = "0 1 0"
                 joint_dict = {
