@@ -16,7 +16,6 @@ class SOLUTION:
 
     def __init__(self, id):
         #region Class Variables
-
         self.myID = id
         if self.myID == 0:
             self.Create_World()
@@ -38,6 +37,7 @@ class SOLUTION:
         self.fitness = float(f.read())
         f.close()
         os.system("rm ./data/fitness{0}.txt".format(str(self.myID)))
+        return self.fitness
 
     def Create_World(self):
         # empty world
@@ -232,6 +232,8 @@ class SOLUTION:
         pyrosim.End()
 
     def Mutate(self):
+        # mutation_possibilities = ['Mutate_Body', 'Mutate_weight', 'Mutate_Weight_And_Body']
+        # mutation_type = random.choice(mutation_possibilities)
         randomRow = random.randint(0, self.sensor_num - 1)
         randomColumn = random.randint(0, self.motor_num - 1)
         self.weights[randomRow, randomColumn] = random.random() * 2 - 1

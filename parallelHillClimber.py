@@ -2,6 +2,7 @@ from solution import SOLUTION
 import constants as c
 import copy
 import os
+import matplotlib.pyplot as plt
 
 class PARALLEL_HILL_CLIMBER:
     def __init__(self):
@@ -14,9 +15,10 @@ class PARALLEL_HILL_CLIMBER:
         for p_size in range(c.populationSize):
             self.parents[p_size] = SOLUTION(self.nextAvailableID)
             self.nextAvailableID += 1
+        self.fitnessValues = []
 
     def Evolve(self):
-        self.Evaluate(self.parents)
+        self.Evaluate(self.parents, 'parents')
         for currentGeneration in range(c.numberOfGenerations):
             self.Evolve_For_One_Generation()
 
@@ -25,7 +27,7 @@ class PARALLEL_HILL_CLIMBER:
 
         self.Mutate()
 
-        self.Evaluate(self.children)
+        self.Evaluate(self.children, 'children')
 
         self.Print()
 
@@ -52,6 +54,30 @@ class PARALLEL_HILL_CLIMBER:
         for k, v in self.parents.items():
             print('\nparent fitness::', self.parents[k].fitness, 'child fitness::', self.children[k].fitness)
 
+
+    def Plot_Fitness(self):
+        if self.fitnessValues:
+            generations = [i for i in range(c.numberOfGenerations)]
+            fig, ax = plt.subplots(1, 1)
+            fig.set_size_inches(20, 10)
+            fitness_for_generation = []
+            best_fitness_values = []
+            population = 0
+            for idx in range (len(self.fitnessValues)):
+                fitness_for_generation.append(self.fitnessValues[idx])
+                population += 1
+                if population == c.populationSize:
+                    best_fitness_values.append(max(fitness_for_generation))
+                    population = 0
+            ax.plot(generations, best_fitness_values[:c.numberOfGenerations], 'go-', label='Training Accuracy (LSTM)')
+            ax.set_title('Fitness Curve')
+            ax.legend()
+            ax.set_xlabel("Generations")
+            ax.set_ylabel("Best Fitness Value")
+            plt.show()
+            plt.savefig('fitnessCurve.png')
+            plt.close(fig)
+
     def Show_Best(self):
         best_solution = self.parents[0]
         if len(self.parents) > 1:
@@ -60,10 +86,13 @@ class PARALLEL_HILL_CLIMBER:
                     best_solution = self.parents[k]
         best_solution.Start_Simulation("GUI")
 
-    def Evaluate(self, solutions):
+    def Evaluate(self, solutions, generation):
         for p_size in range(c.populationSize):
-            solutions[p_size].Start_Simulation("DIRECT")
+            if generation == 'parents' and self.nextAvailableID < c.populationSize:
+                solutions[p_size].Start_Simulation("GUI")
+            else:
+                solutions[p_size].Start_Simulation("DIRECT")
         for p_size in range(c.populationSize):
-            solutions[p_size].Wait_For_Simulation_To_End()
+            self.fitnessValues.append(solutions[p_size].Wait_For_Simulation_To_End())
 
 
