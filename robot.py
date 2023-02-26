@@ -11,12 +11,13 @@ class ROBOT:
     def __init__(self, solutionID):
         self.solutionID = solutionID
         self.motors = dict()
-        self.robotId = p.loadURDF("data/body.urdf")
+        self.robotId = p.loadURDF("data/body{0}.urdf".format(str(self.solutionID)))
         pyrosim.Prepare_To_Simulate(self.robotId)
         self.nn = NEURAL_NETWORK("data/brain{0}.nndf".format(str(self.solutionID)))
         self.Prepare_To_Sense()
         self.Prepare_To_Act()
         os.system("rm ./data/brain{0}.nndf".format(str(self.solutionID)))
+        os.system("rm ./data/body{0}.urdf".format(str(self.solutionID)))
 
 
     def Prepare_To_Sense(self):

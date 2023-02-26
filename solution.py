@@ -8,47 +8,27 @@ import time
 #endregion Imports
 
 #region File Attributes
-# random.seed(15)    # seed for random numbers
-# np.random.seed(10)    # seed for numpy random numbers
+random.seed(42)
+np.random.seed(42)
 #endregion File Attributes
 
 class SOLUTION:
 
-    def __init__(self, id=0):
+    def __init__(self, id):
         #region Class Variables
-        self.myID = id
-        self.currLink = 0
-        self.maxNumLinks = random.randint(5, 15)
-        self.probSensor = 0.5  # max probability threshold to determine whether a link has sensor
-        self.probMotor = 0.7  # max probability threshold to determine whether a joint has motor
-        self.sensors = []  # contains the IDs of the links having sensor
-        self.motors = []  # contains tuples (l1:parent link, l2:child link)
-        # max probability threshold to determine whether the next link will be created on the same face
-        self.probExtend = 0.6
-        # max probability threshold to determine whether the next link will be created in a different face
-        self.probSwitchFace = 0.5
-        '''
-        self.probNextFace: a dictionary having key as a tuple that denotes the direction of the current link...
-                            The values of the dictionary are lists containing probabilities of extending the next
-                            link from the same face or choosing a new face... The probability of switching to the 
-                            opposite face is 0
-        '''
-        self.probNextFace = {
-            (1, 0, 0): [self.probExtend, 0, self.probSwitchFace, self.probSwitchFace, self.probSwitchFace, self.probSwitchFace],
-            (-1, 0, 0): [0, self.probExtend, self.probSwitchFace, self.probSwitchFace, self.probSwitchFace, self.probSwitchFace],
-            (0, 1, 0): [self.probSwitchFace, self.probSwitchFace, self.probExtend, 0, self.probSwitchFace, self.probSwitchFace],
-            (0, -1, 0): [self.probSwitchFace, self.probSwitchFace, 0, self.probExtend, self.probSwitchFace, self.probSwitchFace],
-            (0, 0, 1): [self.probSwitchFace, self.probSwitchFace, self.probSwitchFace, self.probSwitchFace, self.probExtend, 0]
-        }
-        #endregion Class Variables
 
-        #region Create World, Body, and Brain
-        self.Create_World()
-        self.Create_Body()
-        self.Create_Brain()
-        #endregion Create World, Body, and Brain
+        self.myID = id
+        if self.myID == 0:
+            self.Create_World()
 
     def Start_Simulation(self, directOrGUI):
+        links, joints = self.Create_Body()
+        self.links, self.link_num = links, len(links)
+        self.joints, self.joint_num = joints, len(joints)
+        self.sensor_num, self.motor_num = sum([l['sensor_tag'] for l in links]), len(joints)
+        self.weights = np.random.rand(self.sensor_num, self.motor_num)
+        self.weights = 2 * self.weights - 1
+        self.Create_Brain()
         os.system("python3 simulate.py {0} {1} 2&>runLogs.txt &".format(directOrGUI, str(self.myID)))
 
     def Wait_For_Simulation_To_End(self):
@@ -64,146 +44,200 @@ class SOLUTION:
         pyrosim.Start_SDF("data/world.sdf")
         pyrosim.End()
 
+    def Transform_Link(self, name, size, pos):
+        sensor_tag = random.sample([True, False], k=1)[0]
+        color_name = 'green' if sensor_tag else 'blue'
+        link_color = "0 1.0 0 1.0" if sensor_tag else "0 0 1.0 1.0"
+        link_dict = {
+            "name": name,
+            "size": size,
+            "pos": pos,
+            'sensor_tag': sensor_tag, 'color': link_color, 'color_name': color_name,
+        }
+        return link_dict
+
+    def get_size(self, leg_type, link_width_range, link_length_rage, leg_width_range, leg_length_range):
+
+        body_size_x, upper_leg_size_x, lower_leg_size_x = -1, 0, 0
+        while (body_size_x < upper_leg_size_x) or (body_size_x < lower_leg_size_x):
+            body_size_x, body_size_y, body_size_z = random.uniform(*link_length_rage), random.uniform(
+                *link_width_range), random.uniform(*link_width_range)
+            if leg_type == "spider":
+                upper_leg_size_x = random.uniform(*leg_width_range)
+                upper_leg_size_y = random.uniform(*leg_length_range)
+                upper_leg_size_z = random.uniform(*leg_width_range)
+            elif leg_type == "qudrapedal":
+                upper_leg_size_x = random.uniform(*leg_width_range)
+                upper_leg_size_y = random.uniform(*leg_width_range)
+                upper_leg_size_z = random.uniform(*leg_length_range)
+            lower_leg_size_x = random.uniform(*leg_width_range)
+            lower_leg_size_y = random.uniform(*leg_width_range)
+            lower_leg_size_z = random.uniform(*leg_length_range)
+        return (body_size_x, body_size_y, body_size_z), (upper_leg_size_x, upper_leg_size_y, upper_leg_size_z), (
+        lower_leg_size_x, lower_leg_size_y, lower_leg_size_z)
+
     def Create_Body(self):
-        pyrosim.Start_URDF("data/body.urdf")
+        # shape is good at climbing the steps
+        links, joints = {}, {}
 
-        # root link
-        dim = self.Get_Dimensions()
-        # a link can have sensor only if a random number between [0, 1) is less than/equal to the threshold
-        if random.random() < self.probSensor:
-            color = c.color_sensor_link
-            rgba = c.rgba_sensor_link
-            self.sensors.append(self.currLink)
-        else:
-            color = c.color_nosensor_link
-            rgba = c.rgba_nosensor_link
-        pyrosim.Send_Cube(name="Link{0}".format(self.currLink), pos=[0, 0, 0.325], size=dim*2, color=color, rgba=rgba,
-                          mass=np.prod(dim))
-        self.currLink += 1
+        # number of section, for each section, (body szie, leg type, leg size)
+        num_sec = random.randint(2, 5)
+        sec_width_range, sec_length_rage = (0.1, 0.5), (0.1, 0.5)
+        sec_connection_type = random.sample(["snake", "horse", ], k=1)[0]
+        leg_type = random.sample(["spider", "qudrapedal", ], k=1)[0]
+        leg_width_range, leg_length_range = (0.1, 0.3), (0.2, 0.6)
 
-        # recursion for rest of the body
-        self.Create_Body_Rec(parentLink=self.currLink - 1, jointPos=[0+dim[0], 0, 0.325],
-                             currDirection=[1, 0, 0], height=0.325+dim[2])
+        # size
+        (body_size_x, body_size_y, body_size_z), \
+        (upper_leg_size_x, upper_leg_size_y, upper_leg_size_z), \
+        (lower_leg_size_x, lower_leg_size_y, lower_leg_size_z) \
+            = self.get_size(leg_type, sec_width_range, sec_length_rage, leg_width_range, leg_length_range)
 
+        for i in range(num_sec):
+            if i == 0:
+                body_pos_x, body_pos_y, body_pos_z = body_size_x / 2.0, 0, upper_leg_size_z + lower_leg_size_z
+            else:
+                body_pos_x, body_pos_y, body_pos_z = body_size_x / 2.0, 0, 0
+            link_dict = self.Transform_Link(f"body{i}", [body_size_x, body_size_y, body_size_z],
+                                       [body_pos_x, body_pos_y, body_pos_z])
+            links[f"body{i}"] = link_dict
+            # right leg
+            right_upper_pos_x, right_upper_pos_y, right_upper_pos_z = 0, -upper_leg_size_y / 2.0, -upper_leg_size_z / 2.0
+            left_upper_pos_x, left_upper_pos_y, left_upper_pos_z = 0, upper_leg_size_y / 2.0, -upper_leg_size_z / 2.0
+            if leg_type == "spider":
+                right_lower_pos_x, right_lower_pos_y, right_lower_pos_z = 0, -lower_leg_size_y / 2.0, -lower_leg_size_z / 2.0
+                left_lower_pos_x, left_lower_pos_y, left_lower_pos_z = 0, lower_leg_size_y / 2.0, -lower_leg_size_z / 2.0
+            elif leg_type == "qudrapedal":
+                right_lower_pos_x, right_lower_pos_y, right_lower_pos_z = 0, 0, -lower_leg_size_z / 2.0
+                left_lower_pos_x, left_lower_pos_y, left_lower_pos_z = 0, 0, -lower_leg_size_z / 2.0
+            link_dict = self.Transform_Link(f"RightUpperLeg{i}", [upper_leg_size_x, upper_leg_size_y, upper_leg_size_z], \
+                                       [right_upper_pos_x, right_upper_pos_y, right_upper_pos_z])
+            links[f"RightUpperLeg{i}"] = link_dict
+            link_dict = self.Transform_Link(f"LeftUpperLeg{i}", [upper_leg_size_x, upper_leg_size_y, upper_leg_size_z], \
+                                       [left_upper_pos_x, left_upper_pos_y, left_upper_pos_z])
+            links[f"LeftUpperLeg{i}"] = link_dict
+            link_dict = self.Transform_Link(f"RightLowerLeg{i}", [lower_leg_size_x, lower_leg_size_y, lower_leg_size_z], \
+                                       [right_lower_pos_x, right_lower_pos_y, right_lower_pos_z])
+            links[f"RightLowerLeg{i}"] = link_dict
+            link_dict = self.Transform_Link(f"LeftLowerLeg{i}", [lower_leg_size_x, lower_leg_size_y, lower_leg_size_z], \
+                                       [left_lower_pos_x, left_lower_pos_y, left_lower_pos_z])
+            links[f"LeftLowerLeg{i}"] = link_dict
+
+        # generate sec joint
+        for i in range(num_sec):
+            # body joint
+            if i < num_sec - 1:
+                parent, child = f"body{i}", f"body{i + 1}"
+                joint_name = f"{parent}_{child}"
+                if i == 0:
+                    pos_x, pos_y, pos_z = links[parent]["size"][0], 0, links[parent]["pos"][2]
+                else:
+                    pos_x, pos_y, pos_z = links[parent]["size"][0], 0, 0
+                if sec_connection_type == "snake":
+                    joint_axis = "0 0 1"
+                elif sec_connection_type == "horse":
+                    joint_axis = "0 1 0"
+                joint_dict = {
+                    'name': joint_name,
+                    'parent': parent, 'child': child,
+                    'position': [pos_x, pos_y, pos_z], 'jointAxis': joint_axis,
+                }
+                joints[joint_name] = joint_dict
+            # right upper
+            parent, child = f"body{i}", f"RightUpperLeg{i}"
+            joint_name = f"{parent}_{child}"
+            if i == 0:
+                pos_x, pos_y, pos_z = links[parent]["size"][0] / 2.0, -links[parent]["size"][1] / 2.0, \
+                                      links[parent]["pos"][2]
+            else:
+                pos_x, pos_y, pos_z = links[parent]["size"][0] / 2.0, -links[parent]["size"][1] / 2.0, 0
+            if leg_type == "spider":
+                joint_axis = "1 0 0 "
+            elif leg_type == "qudrapedal":
+                joint_axis = "0 1 0"
+            joint_dict = {'name': joint_name, 'parent': parent, 'child': child, 'position': [pos_x, pos_y, pos_z],
+                          'jointAxis': joint_axis, }
+            joints[joint_name] = joint_dict
+            # left upper
+            parent, child = f"body{i}", f"LeftUpperLeg{i}"
+            joint_name = f"{parent}_{child}"
+            if i == 0:
+                pos_x, pos_y, pos_z = links[parent]["size"][0] / 2.0, links[parent]["size"][1] / 2.0, \
+                                      links[parent]["pos"][2]
+            else:
+                pos_x, pos_y, pos_z = links[parent]["size"][0] / 2.0, links[parent]["size"][1] / 2.0, 0
+            if leg_type == "spider":
+                joint_axis = "1 0 0 "
+            elif leg_type == "qudrapedal":
+                joint_axis = "0 1 0"
+            joint_dict = {'name': joint_name, 'parent': parent, 'child': child, 'position': [pos_x, pos_y, pos_z],
+                          'jointAxis': joint_axis, }
+            joints[joint_name] = joint_dict
+            # right_lower
+            parent, child = f"RightUpperLeg{i}", f"RightLowerLeg{i}"
+            joint_name = f"{parent}_{child}"
+            if leg_type == "spider":
+                joint_axis = "1 0 0 "
+                pos_x, pos_y, pos_z = 0, -links[parent]["size"][1], -links[parent]["size"][2]
+            elif leg_type == "qudrapedal":
+                joint_axis = "0 1 0"
+                pos_x, pos_y, pos_z = 0, -links[parent]["size"][1] / 2.0, -links[parent]["size"][2]
+            joint_dict = {'name': joint_name, 'parent': parent, 'child': child, 'position': [pos_x, pos_y, pos_z],
+                          'jointAxis': joint_axis, }
+            joints[joint_name] = joint_dict
+            # left lower
+            parent, child = f"LeftUpperLeg{i}", f"LeftLowerLeg{i}"
+            joint_name = f"{parent}_{child}"
+            if leg_type == "spider":
+                joint_axis = "1 0 0 "
+                pos_x, pos_y, pos_z = 0, links[parent]["size"][1], -links[parent]["size"][2]
+            elif leg_type == "qudrapedal":
+                joint_axis = "0 1 0"
+                pos_x, pos_y, pos_z = 0, links[parent]["size"][1] / 2.0, -links[parent]["size"][2]
+            joint_dict = {'name': joint_name, 'parent': parent, 'child': child, 'position': [pos_x, pos_y, pos_z],
+                          'jointAxis': joint_axis, }
+            joints[joint_name] = joint_dict
+
+        # generate urdf file
+        pyrosim.Start_URDF("data/body{0}.urdf".format(self.myID))
+        for link_dict in links.values():
+            pyrosim.Send_Cube(name=link_dict['name'], pos=link_dict['pos'], size=link_dict['size'],
+                              rgba=link_dict['color'], color=link_dict['color_name'])
+        for joint_dict in joints.values():
+            pyrosim.Send_Joint(name=joint_dict['name'], parent=joint_dict['parent'], child=joint_dict['child'], \
+                               type="revolute", position=joint_dict['position'], jointAxis=joint_dict['jointAxis'])
         pyrosim.End()
-
-    def Create_Body_Rec(self, parentLink, jointPos, currDirection, height):
-        # base case for stopping recursion
-        if self.currLink == self.maxNumLinks:
-            return
-        # check if the limb is underground
-        if height < 0.325:
-            return
-
-        # create joint from the parentLink to a new link
-        '''
-        joint's axis direction based on current link direction:
-        If the current direction is z (0,0,1), then the joint should enable motion in x-y plane.
-        If the current direction is y (0,1,0), then the joint should enable motion in x-z plane.
-        If the current direction is x (1,0,0), then the joint should enable motion in y-z plane.
-        '''
-        if currDirection == [0, 0, 1] or currDirection == [0, 0, -1]:
-            axis = "0 0 1"
-        elif currDirection == [0, 1, 0] or currDirection == [0, -1, 0]:
-            axis = "0 1 0"
-        else:
-            axis = "1 0 0"
-        pyrosim.Send_Joint(name="Link{0}_Link{1}".format(parentLink, self.currLink), parent="Link{0}".format(parentLink),
-                           child="Link{0}".format(self.currLink), type="revolute", position=jointPos, jointAxis=axis)
-        # a joint can have motor only if a random number between [0, 1) is less than/equal to the threshold
-        if random.random() < self.probMotor:
-            self.motors.append((parentLink, self.currLink))
-
-        newDim = self.Get_Dimensions()
-        linkPos = np.multiply(currDirection, newDim)
-        if random.random() < self.probSensor:
-            color = c.color_sensor_link
-            rgba = c.rgba_sensor_link
-            self.sensors.append(self.currLink)
-        else:
-            color = c.color_nosensor_link
-            rgba = c.rgba_nosensor_link
-        pyrosim.Send_Cube(name="Link{0}".format(self.currLink), pos=linkPos, size=newDim*2, color=color, rgba=rgba,
-                          mass=np.prod(newDim))
-        newParentLink = self.currLink
-        self.currLink += 1
-
-        # child recursive function
-        self.Get_NewDirection_Rec(currDirection=currDirection, parentLink=newParentLink, dim=newDim,
-                                lstProbNextFace=self.probNextFace[tuple(currDirection)], height=height)
-    def Get_NewDirection_Rec(self, currDirection, parentLink, dim, lstProbNextFace, height):
-        newDir = currDirection
-        for idx in range(len(lstProbNextFace)):
-            if (random.random() < lstProbNextFace[idx]):
-                newDir = self.Get_Face_Directions(idx)
-                newDir = currDirection if newDir == [0, 0, 0] else newDir
-        jointPos = np.multiply(np.add(currDirection, newDir), dim)
-        self.Create_Body_Rec(parentLink, jointPos, newDir, height+dim[2])
-
-    def Get_Face_Directions(self, faceIdx):
-        dir = [0, 0, 0]
-        if faceIdx == 0:
-            dir = [1, 0, 0]
-        elif faceIdx == 1:
-            dir = [-1, 0, 0]
-        elif faceIdx == 2:
-            dir = [0, 1, 0]
-        elif faceIdx == 3:
-            dir = [0, -1, 0]
-        elif faceIdx == 4:
-            dir = [0, 0, 1]
-        # elif faceIdx == 5:
-        #     dir = [0, 0, -1]
-        return dir
+        return list(links.values()), list(joints.values())
 
     def Create_Brain(self):
         pyrosim.Start_NeuralNetwork("data/brain{0}.nndf".format(self.myID))
 
-        # random synapse weights
-        self.weights = np.random.random((len(self.sensors), len(self.motors))) * 2 - 1
-
         # sensor neurons
-        for i in self.sensors:
-            pyrosim.Send_Sensor_Neuron(name="Sensor{0}".format(i), linkName="Link{0}".format(i))
+        neuron_id = 0
+        for i in range(self.link_num):
+            if self.links[i]['sensor_tag']:
+                pyrosim.Send_Sensor_Neuron(name=neuron_id, linkName=self.links[i]['name'])
+                neuron_id += 1
 
         # motor neurons
-        for m in self.motors:
-            pyrosim.Send_Motor_Neuron(name="Motor{0}".format(m[0]),
-                                      jointName="Link{0}_Link{1}".format(m[0], m[1]))
+        for i in range(self.motor_num):
+            pyrosim.Send_Motor_Neuron(name=neuron_id, jointName=self.joints[i]['name'])
+            neuron_id += 1
 
-        print("motors::", len(self.motors))
-        print("sensors::", len(self.sensors))
-        print("Links::", self.currLink+1)
-        # synapses
-        i=0
-        for s in self.sensors:
-            j=0
-            for m in self.motors:
-                pyrosim.Send_Synapse(sourceNeuronName="Sensor{0}".format(s), targetNeuronName="Motor{0}".format(m[0]),
-                                     weight=self.weights[i][j])
-                j += 1
-            i += 1
+        for currentRow in range(self.sensor_num):
+            for currentColumn in range(self.motor_num):
+                pyrosim.Send_Synapse(sourceNeuronName=currentRow, targetNeuronName=currentColumn + self.sensor_num,
+                                     weight=self.weights[currentRow][currentColumn])
 
         pyrosim.End()
 
     def Mutate(self):
-        randomRow = random.randint(0, len(self.sensors) - 1)
-        randomColumn = random.randint(0, len(self.motors) - 1)
+        randomRow = random.randint(0, self.sensor_num - 1)
+        randomColumn = random.randint(0, self.motor_num - 1)
         self.weights[randomRow, randomColumn] = random.random() * 2 - 1
 
     def Set_ID(self, nextAvailableID):
         self.myID = nextAvailableID
-
-    '''
-    Returns a random array of shape 3X1 with the values in the specified range
-    '''
-    def Get_Dimensions(self):
-        dims = np.random.rand(3)
-        dims[1] *= 1.1
-        dims[0] *= 1.1
-        dims[2] = dims[2] * 0.2 + 0.125
-        return  dims
-
 
 
 

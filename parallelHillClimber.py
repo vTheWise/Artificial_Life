@@ -6,7 +6,7 @@ import os
 class PARALLEL_HILL_CLIMBER:
     def __init__(self):
         for file in os.listdir("./data"):
-            if file.startswith("fitness") or file.startswith("brain"):
+            if file.startswith("fitness") or file.startswith("brain") or (file.startswith("body")):
                 os.system("rm ./data/{0}".format(file))
 
         self.parents = dict()
