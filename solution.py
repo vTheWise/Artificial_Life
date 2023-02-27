@@ -283,39 +283,51 @@ class SOLUTION:
         self.Mutate_Brain()
 
     def Mutate_Body(self):
-        limb_number = 0
-        for l in self.links[::-1]:
-            if 'UpperLeg' in l['name']:
-                limb_number = re.findall(r'\d+', l['name'])[0]
-                self.links.remove(l)
-                self.num_links -= 1
-                self.num_sensors = self.num_sensors - 1 if l['s_flag'] else self.num_sensors
-                # delete joints
-                for j in self.joints[::-1]:
-                    if j['parent'] == l['name'] or j['child'] == l['name']:
-                        self.joints.remove(j)
-                        self.num_motors -= 1
-                        self.num_joints -= 1
-                break
-        for l in self.links[::-1]:
-            if 'LowerLeg{0}'.format(limb_number) in l['name']:
-                self.links.remove(l)
-                self.num_links -= 1
-                self.num_sensors = self.num_sensors - 1 if l['s_flag'] else self.num_sensors
-                break
+        if self.num_links > c.minimumLinks:
+            limb_number = 0
+            print('Mutate_Body Enter, Num Sensors::', self.num_sensors)
+            print('Mutate_Body Enter, Num Links::', self.num_links)
+            print('Mutate_Body Enter, Num Joints::', self.num_joints)
+            for l in self.links[::-1]:
+                if 'UpperLeg' in l['name']:
+                    limb_number = re.findall(r'\d+', l['name'])[0]
+                    self.links.remove(l)
+                    self.num_links -= 1
+                    self.num_sensors = self.num_sensors - 1 if l['s_flag'] else self.num_sensors
+                    # delete joints
+                    for j in self.joints[::-1]:
+                        if j['parent'] == l['name'] or j['child'] == l['name']:
+                            self.joints.remove(j)
+                            self.num_motors -= 1
+                            self.num_joints -= 1
+                    break
+            for l in self.links[::-1]:
+                if 'LowerLeg{0}'.format(limb_number) in l['name']:
+                    self.links.remove(l)
+                    self.num_links -= 1
+                    self.num_sensors = self.num_sensors - 1 if l['s_flag'] else self.num_sensors
+                    break
+        print('Mutate_Body Exit, Num Sensors::', self.num_sensors)
+        print('Mutate_Body Exit, Num Links::', self.num_links)
+        print('Mutate_Body Exit, Num Joints::', self.num_joints)
     def Mutate_Weight_And_Brain(self):
         self.Mutate_Weight()
         self.Mutate_Brain()
 
     def Mutate_Brain(self):
-        s_flag = [False]
+        print('Mutate_Brain Enter, Num Sensors::', self.num_sensors)
+        print('Mutate_Brain Enter, Num Links::', self.num_links)
+        s_flag = []
         while sum(s_flag) != self.num_sensors:
             s_flag = random.choices([True, False], k=self.num_links)
+        print('Mutate_Brain, s_flag::', len(s_flag))
         for i in range(self.num_links):
             self.links[i]['s_flag'] = s_flag[i]
             self.links[i]['color_name'] = c.color_sensor_link if s_flag else c.color_nosensor_link
             self.links[i]['color'] = c.rgba_sensor_link if s_flag else c.rgba_nosensor_link
         self.num_sensors = sum([l['s_flag'] for l in self.links])
+        print('Mutate_Brain Exit, Num Sensors::', self.num_sensors)
+        print('Mutate_Brain Exit, Num Links::', self.num_links)
 
     def Mutate_Weight(self):
         randomRow = random.randint(0, self.num_sensors - 1)

@@ -30,3 +30,4 @@ num_simulation_initial_popluation = math.floor(populationSize/10) + 1
 numpy_seed = 250
 random_seed = 250
 fitnessFunction = "Creature's negative Euclidean distance from ball"
+minimumLinks = 10
