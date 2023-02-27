@@ -4,7 +4,11 @@ import copy
 import os
 import matplotlib.pyplot as plt
 import random
-import math
+from matplotlib import ticker
+import numpy as np
+import statistics
+from itertools import chain
+
 
 random.seed(c.random_seed)
 
@@ -68,21 +72,28 @@ class PARALLEL_HILL_CLIMBER:
             fig.set_size_inches(20, 10)
             fitness_for_generation = []
             best_fitness_values = []
+            avg_fitness_values = []
             population = 0
             for idx in range (len(self.fitnessValues)):
                 fitness_for_generation.append(self.fitnessValues[idx])
                 population += 1
                 if population == c.populationSize:
                     best_fitness_values.append(max(fitness_for_generation))
+                    avg_fitness_values.append(statistics.fmean(fitness_for_generation))
                     population = 0
-            ax.plot(generations, best_fitness_values[:c.numberOfGenerations], 'go-', label='random.seed = {0}\nnumpy.random.seed = {1}'.format(c.random_seed, c.numpy_seed))
-            ax.set_title('Fitness Curve (Fitness:{0})'.format(c.fitnessFunction))
+
+            ax.plot(generations, best_fitness_values[:c.numberOfGenerations], 'go-', label='Best fitness values')
+            ax.plot(generations, avg_fitness_values[:c.numberOfGenerations], 'ro-', label='Average fitness values')
+            ax.set_title('Fitness Curve (Fitness: {0})'.format(c.fitnessFunction))
             ax.legend(loc='upper left')
             ax.set_xlabel("Generations")
-            ax.set_ylabel("Best Fitness Value")
-            plt.ylim(min(best_fitness_values[:c.numberOfGenerations])-1, max(best_fitness_values[:c.numberOfGenerations])+1)
-            plt.yticks(range(math.ceil(min(best_fitness_values[:c.numberOfGenerations]))-1,
-                             math.ceil(max(best_fitness_values[:c.numberOfGenerations]))+1))
+            ax.set_ylabel("Fitness Values")
+            plt.suptitle('random.seed = {0}\nnumpy.random.seed = {1}'.format(c.random_seed, c.numpy_seed))
+            plt.ylim(min(chain(best_fitness_values[:c.numberOfGenerations], avg_fitness_values[:c.numberOfGenerations]))-1,
+                         max(chain(best_fitness_values[:c.numberOfGenerations], avg_fitness_values[:c.numberOfGenerations]))+1)
+            plt.yticks(np.arange(min(chain(best_fitness_values[:c.numberOfGenerations], avg_fitness_values[:c.numberOfGenerations]))-1.0,
+                                 max(chain(best_fitness_values[:c.numberOfGenerations], avg_fitness_values[:c.numberOfGenerations]))+1.0, 0.5))
+            ax.yaxis.set_major_formatter(ticker.StrMethodFormatter("{x:.2f}"))
             plt.show()
             plt.savefig('fitnessCurve.png')
             plt.close(fig)
@@ -96,9 +107,9 @@ class PARALLEL_HILL_CLIMBER:
         best_solution.Start_Simulation("GUI")
 
     def Evaluate(self, solutions, generation):
-        display_idx = random.sample(range(c.populationSize), c.num_simulation_initial_popluation)
+        display_idx = random.choices(range(c.populationSize), k=c.num_simulation_initial_popluation)
         for p_size in range(c.populationSize):
-            if generation == 'parents' and self.nextAvailableID <= c.populationSize and p_size == display_idx:
+            if generation == 'parents' and p_size in display_idx:
                 solutions[p_size].Start_Simulation("GUI")
             elif generation == 'children':
                 solutions[p_size].Start_Simulation("DIRECT", isMutation=True)

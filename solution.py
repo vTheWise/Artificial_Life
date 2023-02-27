@@ -5,6 +5,7 @@ import pyrosim.pyrosim as pyrosim
 import random
 import os
 import time
+import re
 #endregion Imports
 
 #region File Attributes
@@ -263,31 +264,59 @@ class SOLUTION:
         pyrosim.End()
 
     def Mutate(self):
-        mutation_possibilities = ['Mutate_Sensors', 'Mutate_weight', 'Mutate_Sensor_And_Weight']
-        # 'Mutate_Brain' 'Mutate_Body_And_Brain' 'Mutate_Sensors' 'Mutate_Weight_And_Body' 'Mutate_Body'
+        mutation_possibilities = ['Mutate_Weight', 'Mutate_Brain', 'Mutate_Weight_And_Brain', 'Mutate_Body',
+                                  'Mutate_Body_And_Brain']
         mutation_type = random.choice(mutation_possibilities)
-        if mutation_type == 'Mutate_weight':
+        if mutation_type == 'Mutate_Weight':
             self.Mutate_Weight()
+        elif mutation_type == 'Mutate_Brain':
+            self.Mutate_Brain()
+        elif mutation_type == 'Mutate_Weight_And_Brain':
+            self.Mutate_Weight_And_Brain()
         elif mutation_type == 'Mutate_Body':
             self.Mutate_Body()
-        elif mutation_type == 'Mutate_Weight_And_Body':
-            self.Mutate_Weight_And_Body()
+        elif mutation_type == 'Mutate_Body_And_Brain':
+            self.Mutate_Body_And_Brain()
 
-    def Mutate_Sensor_And_Weight(self):
-        self.Mutate_Sensors()
-        self.Mutate_Weights()
-    def Mutate_Sensors(self):
-        s_flag = random.sample([True, False], self.num_links)
+    def Mutate_Body_And_Brain(self):
+        self.Mutate_Body()
+        self.Mutate_Brain()
+
+    def Mutate_Body(self):
+        limb_number = 0
+        for l in self.links[::-1]:
+            if 'UpperLeg' in l['name']:
+                limb_number = re.findall(r'\d+', l['name'])[0]
+                self.links.remove(l)
+                self.num_links -= 1
+                self.num_sensors = self.num_sensors - 1 if l['s_flag'] else self.num_sensors
+                # delete joints
+                for j in self.joints[::-1]:
+                    if j['parent'] == l['name'] or j['child'] == l['name']:
+                        self.joints.remove(j)
+                        self.num_motors -= 1
+                        self.num_joints -= 1
+                break
+        for l in self.links[::-1]:
+            if 'LowerLeg{0}'.format(limb_number) in l['name']:
+                self.links.remove(l)
+                self.num_links -= 1
+                self.num_sensors = self.num_sensors - 1 if l['s_flag'] else self.num_sensors
+                break
+    def Mutate_Weight_And_Brain(self):
+        self.Mutate_Weight()
+        self.Mutate_Brain()
+
+    def Mutate_Brain(self):
+        s_flag = [False]
+        while sum(s_flag) != self.num_sensors:
+            s_flag = random.choices([True, False], k=self.num_links)
         for i in range(self.num_links):
-            self.links[i]['s_flag'] = s_flag
+            self.links[i]['s_flag'] = s_flag[i]
             self.links[i]['color_name'] = c.color_sensor_link if s_flag else c.color_nosensor_link
             self.links[i]['color'] = c.rgba_sensor_link if s_flag else c.rgba_nosensor_link
         self.num_sensors = sum([l['s_flag'] for l in self.links])
 
-    def Mutate_Body(self):
-        pass
-    def Mutate_Weight_And_Body(self):
-        pass
     def Mutate_Weight(self):
         randomRow = random.randint(0, self.num_sensors - 1)
         randomColumn = random.randint(0, self.num_motors - 1)
