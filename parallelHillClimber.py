@@ -3,6 +3,10 @@ import constants as c
 import copy
 import os
 import matplotlib.pyplot as plt
+import random
+import math
+
+random.seed(c.random_seed)
 
 class PARALLEL_HILL_CLIMBER:
     def __init__(self):
@@ -20,6 +24,7 @@ class PARALLEL_HILL_CLIMBER:
     def Evolve(self):
         self.Evaluate(self.parents, 'parents')
         for currentGeneration in range(c.numberOfGenerations):
+            print('currentGeneration:::', currentGeneration)
             self.Evolve_For_One_Generation()
 
     def Evolve_For_One_Generation(self):
@@ -70,12 +75,14 @@ class PARALLEL_HILL_CLIMBER:
                 if population == c.populationSize:
                     best_fitness_values.append(max(fitness_for_generation))
                     population = 0
-            ax.plot(generations, best_fitness_values[:c.numberOfGenerations], 'go-', label='Training Accuracy (LSTM)')
-            ax.set_title('Fitness Curve')
-            ax.legend()
+            ax.plot(generations, best_fitness_values[:c.numberOfGenerations], 'go-', label='random.seed = {0}\nnumpy.random.seed = {1}'.format(c.random_seed, c.numpy_seed))
+            ax.set_title('Fitness Curve (Fitness:{0})'.format(c.fitnessFunction))
+            ax.legend(loc='upper left')
             ax.set_xlabel("Generations")
             ax.set_ylabel("Best Fitness Value")
-            plt.yscale('symlog')
+            plt.ylim(min(best_fitness_values[:c.numberOfGenerations])-1, max(best_fitness_values[:c.numberOfGenerations])+1)
+            plt.yticks(range(math.ceil(min(best_fitness_values[:c.numberOfGenerations]))-1,
+                             math.ceil(max(best_fitness_values[:c.numberOfGenerations]))+1))
             plt.show()
             plt.savefig('fitnessCurve.png')
             plt.close(fig)
@@ -89,8 +96,9 @@ class PARALLEL_HILL_CLIMBER:
         best_solution.Start_Simulation("GUI")
 
     def Evaluate(self, solutions, generation):
+        display_idx = random.sample(range(c.populationSize), c.num_simulation_initial_popluation)
         for p_size in range(c.populationSize):
-            if generation == 'parents' and self.nextAvailableID == c.populationSize:
+            if generation == 'parents' and self.nextAvailableID <= c.populationSize and p_size == display_idx:
                 solutions[p_size].Start_Simulation("GUI")
             elif generation == 'children':
                 solutions[p_size].Start_Simulation("DIRECT", isMutation=True)

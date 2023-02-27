@@ -9,8 +9,8 @@ import time
 
 #region File Attributes
 # set random seeds
-random.seed(100)
-np.random.seed(150)
+random.seed(c.random_seed)
+np.random.seed(c.numpy_seed)
 
 # constants
 SPIDER_LEG_TYPE = 'spider'

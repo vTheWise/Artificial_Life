@@ -25,3 +25,7 @@ color_nosensor_link = "Blue"
 rgba_sensor_link = "0 1.0 0 1.0"
 rgba_nosensor_link = "0 0 1.0 1.0"
 ball_pos = [-15, 15, 3]
+num_simulation_initial_popluation = 2
+numpy_seed = 100
+random_seed = 150
+fitnessFunction = "Creature's Euclidean distance from ball"
