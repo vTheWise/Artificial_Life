@@ -8,4 +8,4 @@ class WORLD:
         self.physicsClient = physicsClient
         p.setAdditionalSearchPath(pybullet_data.getDataPath())
         self.planeId = p.loadURDF("plane.urdf")
-        p.loadSDF("data/world.sdf")
+        self.ballId = p.loadSDF("data/world.sdf")

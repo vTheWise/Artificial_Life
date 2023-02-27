@@ -9,8 +9,8 @@ import time
 
 #region File Attributes
 # set random seeds
-random.seed(42)
-np.random.seed(42)
+random.seed(100)
+np.random.seed(150)
 
 # constants
 SPIDER_LEG_TYPE = 'spider'
@@ -23,20 +23,36 @@ class SOLUTION:
 
     def __init__(self, id):
         self.myID = id
+        self.parentID = -1
         if self.myID == 0:
             self.Create_World()
 
-    def Start_Simulation(self, directOrGUI):
-        links, joints = self.Create_Body()
-
-        self.links, self.num_links = links, len(links)
-        self.joints, self.num_joints = joints, len(joints)
-        self.num_sensors, self.num_motors = sum([l['s_flag'] for l in links]), len(joints)
-        self.weights = (2 * np.random.rand(self.num_sensors, self.num_motors)) - 1
+    def Start_Simulation(self, directOrGUI, isMutation=False):
+        self.num_limbs = random.randint(2, 8)
+        if isMutation:
+            self.Create_Child_Body()
+        else:
+            links, joints = self.Create_Body()
+            self.links, self.num_links = links, len(links)
+            self.joints, self.num_joints = joints, len(joints)
+            self.num_sensors, self.num_motors = sum([l['s_flag'] for l in links]), len(joints)
+            self.weights = (2 * np.random.rand(self.num_sensors, self.num_motors)) - 1
 
         self.Create_Brain()
 
         os.system("python3 simulate.py {0} {1} 2&>runLogs.txt &".format(directOrGUI, str(self.myID)))
+
+    def Create_Child_Body(self):
+        # generate body's urdf file: suffix: myID
+        pyrosim.Start_URDF("data/body{0}.urdf".format(self.myID))
+        for link_dict in self.links:
+            pyrosim.Send_Cube(name=link_dict['name'], pos=link_dict['pos'], size=link_dict['size'],
+                              rgba=link_dict['color'], color=link_dict['color_name'],
+                              mass=np.prod(link_dict['size']) / 2)
+        for joint_dict in self.joints:
+            pyrosim.Send_Joint(name=joint_dict['name'], parent=joint_dict['parent'], child=joint_dict['child'], \
+                               type="revolute", position=joint_dict['position'], jointAxis=joint_dict['jointAxis'])
+        pyrosim.End()
 
     def Wait_For_Simulation_To_End(self):
         while not os.path.exists("data/fitness{0}.txt".format(str(self.myID))):
@@ -48,8 +64,8 @@ class SOLUTION:
         return self.fitness
 
     def Create_World(self):
-        # empty world
         pyrosim.Start_SDF("data/world.sdf")
+        pyrosim.Send_Sphere(name="Ball", pos=c.ball_pos, size=[0.75])
         pyrosim.End()
 
     def Set_Body_Characteristics(self, name, size, pos):
@@ -84,7 +100,6 @@ class SOLUTION:
 
     def Create_Body(self):
         links, joints = {}, {}
-        num_limbs = random.randint(2, 8)
         limb_width_range, link_length_rage = (0.1, 0.5), (0.1, 0.5)
         creature_inspired_by = random.choice([CREATURE_REPTILE, CREATURE_MAMMAL])
         leg_type = random.choice([SPIDER_LEG_TYPE, QUADRUPED_LEG_TYPE])
@@ -93,7 +108,7 @@ class SOLUTION:
         (bodyX, bodyY, bodyZ), (upperLegX, upperLegY, upperLegZ), (lowerLegX, lowerLegY, lowerLegZ) \
             = self.Get_Limb_Size(leg_type, limb_width_range, link_length_rage, leg_width_range, leg_length_range)
 
-        for i in range(num_limbs):
+        for i in range(self.num_limbs):
             if i == 0: # root limb with absolute position
                 body_pos_x, body_pos_y, body_pos_z = bodyX / 2.0, 0, upperLegZ + lowerLegZ
             else: # subsequent limbs with relative positions
@@ -132,8 +147,8 @@ class SOLUTION:
             links[f"LeftLowerLeg{i}"] = link_dict
 
         # link joints
-        for i in range(num_limbs):
-            if i < num_limbs - 1:
+        for i in range(self.num_limbs):
+            if i < self.num_limbs - 1:
                 parent, child = f"link{i}", f"link{i + 1}"
                 joint_name = f"{parent}_{child}"
                 if i == 0: # absolute position
@@ -248,8 +263,32 @@ class SOLUTION:
         pyrosim.End()
 
     def Mutate(self):
-        # mutation_possibilities = ['Mutate_Body', 'Mutate_weight', 'Mutate_Weight_And_Body']
-        # mutation_type = random.choice(mutation_possibilities)
+        mutation_possibilities = ['Mutate_Sensors', 'Mutate_weight', 'Mutate_Sensor_And_Weight']
+        # 'Mutate_Brain' 'Mutate_Body_And_Brain' 'Mutate_Sensors' 'Mutate_Weight_And_Body' 'Mutate_Body'
+        mutation_type = random.choice(mutation_possibilities)
+        if mutation_type == 'Mutate_weight':
+            self.Mutate_Weight()
+        elif mutation_type == 'Mutate_Body':
+            self.Mutate_Body()
+        elif mutation_type == 'Mutate_Weight_And_Body':
+            self.Mutate_Weight_And_Body()
+
+    def Mutate_Sensor_And_Weight(self):
+        self.Mutate_Sensors()
+        self.Mutate_Weights()
+    def Mutate_Sensors(self):
+        s_flag = random.sample([True, False], self.num_links)
+        for i in range(self.num_links):
+            self.links[i]['s_flag'] = s_flag
+            self.links[i]['color_name'] = c.color_sensor_link if s_flag else c.color_nosensor_link
+            self.links[i]['color'] = c.rgba_sensor_link if s_flag else c.rgba_nosensor_link
+        self.num_sensors = sum([l['s_flag'] for l in self.links])
+
+    def Mutate_Body(self):
+        pass
+    def Mutate_Weight_And_Body(self):
+        pass
+    def Mutate_Weight(self):
         randomRow = random.randint(0, self.num_sensors - 1)
         randomColumn = random.randint(0, self.num_motors - 1)
         self.weights[randomRow, randomColumn] = random.random() * 2 - 1

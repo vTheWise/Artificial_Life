@@ -5,6 +5,7 @@ from motor import MOTOR
 from pyrosim.neuralNetwork import NEURAL_NETWORK
 import os
 import constants as c
+import numpy as np
 
 class ROBOT:
 
@@ -44,12 +45,20 @@ class ROBOT:
     def Think(self):
         self.nn.Update()
 
-    def Get_Fitness(self):
+    def __dist(self, pos1, pos2):
+        return np.sqrt((pos1[0] - pos2[0]) ** 2 + (pos1[1] - pos2[1]) ** 2)
+
+    def Get_Fitness(self, ballId):
         basePositionAndOrientation = p.getBasePositionAndOrientation(self.robotId)
         basePosition = basePositionAndOrientation[0]
-        xPosition = basePosition[0]
+
+        ball_orientation = p.getBasePositionAndOrientation(ballId)
+        ball_position = ball_orientation[0]
+
+        dist = self.__dist(ball_position, basePosition)
+
         with open('data/tmp{0}.txt'.format(str(self.solutionID)), 'w') as f:
-            f.write(str(-1 * xPosition))
+            f.write(str(-1 * dist))
             f.close()
         os.system("mv data/tmp{0}.txt data/fitness{0}.txt".format(str(self.solutionID)))
 

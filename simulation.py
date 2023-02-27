@@ -38,5 +38,5 @@ class SIMULATION:
                 time.sleep(c.sleepTime)
 
     def Get_Fitness(self):
-        self.robot.Get_Fitness()
+        self.robot.Get_Fitness(self.world.ballId[0])
 

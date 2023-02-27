@@ -37,6 +37,7 @@ class PARALLEL_HILL_CLIMBER:
         self.children = dict()
         for k, v in self.parents.items():
             self.children[k] = copy.deepcopy(self.parents[k])
+            self.children[k].parentID = self.parents[k].myID
             self.children[k].Set_ID(self.nextAvailableID)
             self.nextAvailableID += 1
 
@@ -74,6 +75,7 @@ class PARALLEL_HILL_CLIMBER:
             ax.legend()
             ax.set_xlabel("Generations")
             ax.set_ylabel("Best Fitness Value")
+            plt.yscale('symlog')
             plt.show()
             plt.savefig('fitnessCurve.png')
             plt.close(fig)
@@ -90,6 +92,8 @@ class PARALLEL_HILL_CLIMBER:
         for p_size in range(c.populationSize):
             if generation == 'parents' and self.nextAvailableID == c.populationSize:
                 solutions[p_size].Start_Simulation("GUI")
+            elif generation == 'children':
+                solutions[p_size].Start_Simulation("DIRECT", isMutation=True)
             else:
                 solutions[p_size].Start_Simulation("DIRECT")
         for p_size in range(c.populationSize):
