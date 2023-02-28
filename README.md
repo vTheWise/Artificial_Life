@@ -12,19 +12,9 @@ These new creatures also contain a random number of randomly shaped links with r
 
 For reproducing the selected results, I have added seed values for both the numpy and random modules that I've been using in the program. These seeds are defined in **constant.py** as numpy_seed and random_seed, respectively. They can be changed before running the program.
 
-## Sensor Placements
-
-The creatures in our random 3D world currently have touch sensors. Whether a link will have a sensor is defined with the help of a random choice function with a probability of 0.5. 
-
-## Motor Placements
-
-Motors are placed on the joints of the creatures.
 
 ## Morphospace
 
-### World
-
-The world contains a spherical ball on a 3D plane. The world also contains a gravitational force.
 
 ### Creature - Body
 
@@ -35,6 +25,21 @@ The creatures in our random 3D world are created using cuboids of random dimensi
 Here's a sneak peek into the Create_Body() function used for generating creatures's bodies:
 
 ![Body Plan](https://github.com/vTheWise/Artificial_Life/blob/randomEvolution/Diagrams/Body_Creation_Plan.png?raw=true)
+
+
+### Sensor Placements
+
+The creatures in our random 3D world currently have touch sensors. Whether a link will have a sensor is defined with the help of a random choice function with a probability of 0.5. 
+
+
+### Motor Placements
+
+Motors are placed on the joints of the creatures.
+
+
+### World
+
+The world contains a spherical ball on a 3D plane. The world also contains a gravitational force.
 
 
 ### Creature - Brain
