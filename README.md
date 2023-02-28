@@ -77,6 +77,15 @@ Initailly, a population of random creatures is generated. The number of creature
 
 ![Evolution](https://github.com/vTheWise/Artificial_Life/blob/randomEvolution/Diagrams/Mutation.jpg?raw=true)
 
+Here are a few fitness curves generated with different random seed values. These curve display the best and average fitness values of each generation on the y-axis and the number of generations on the x-axis:
+
+![Fitness 1](https://github.com/vTheWise/Artificial_Life/blob/randomEvolution/Diagrams/fitness_curve_1.png?raw=true)
+
+![Fitness 2](https://github.com/vTheWise/Artificial_Life/blob/randomEvolution/Diagrams/fitness_curve_2.png?raw=true)
+
+![Fitness 3](https://github.com/vTheWise/Artificial_Life/blob/randomEvolution/Diagrams/fitness_curve_3.png?raw=true)
+
+
 
 ## Demo
 [Link to Youtube Video](https://youtube.com)
