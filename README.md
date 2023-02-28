@@ -1,62 +1,80 @@
-# Artificial_Life -> random3D
+# Artificial_Life -> randomEvolution
 
-In this version, I've expanded the design space ("morphospace") of the kinematic chain that I created in the branch **kinematicSnakes** by allowing the chain to branch in 3D. These new creatures also contain a random number of randomly shaped links with random sensor placement along the links and random motor placement along the joints. The blue color indicates the links without any sensor and the green color indicates the links with a touch sensor. The number of randomly generated creatures is defined in **constants.py** as 100, and it can be changed before running the program. The number of links to be generated is defined as a random function between the given range in the constructor of **solution.py** as self.maxNumLinks. This range can also be updated before running the program.
+In this version, I've changed the morphospace of the creatures that I created in the branch **random3D**. Additionally, the new creatures are now powered by an evolutionary algorithm that is fueled by a fitness function. The objective of the fitness function is to evolve locomotive capabilities in the creature in a manner that they try to chase a ball present in the 3D world. Creatures try to obtain this objective by minimizing the Euclidean distance between the ball and themselves. Let's say the position of a creature is pos1: [x1, y1, z1] and the position of the ball is pos2: [x2, y2, z2], then the distance between the two can be calculated using Euclidean method: (I've ignored the z-axis since it was not relevant for our creature's movement)
+
+```
+numpy.sqrt((pos1[0] - pos2[0]) ** 2 + (pos1[1] - pos2[1]) ** 2)
+```
+
+The best creatures in the population are searched with the help of parallel hill climbing method.
+
+These new creatures also contain a random number of randomly shaped links with random sensor placement along the links and random motor placement along the joints. The blue color indicates the links without any sensor and the green color indicates the links with a touch sensor.
+
+For reproducing the selected results, I have added seed values for both the numpy and random modules that I've been using in the program. These seeds are defined in **constant.py** as numpy_seed and random_seed, respectively. They can be changed before running the program.
 
 ## Sensor Placements
 
-The creatures in our random3D world currently have touch sensors. Whether a link will have a sensor is defined with the help of a probabilty threshold and a random number generating function withing the range: [0, 1). After each link is created, the random function is called and if the generated number is **less than** the threshold defined in the constructor of Solution.py as "self.probSensor = 0.5", then the corresponding link will have a sensor. Therefore, the probability of each link having a sensor is roughly 0.5 (or 50%). Practically, it is a little bit higher than 0.5, since the range of the random number generating function is inclusive of the lower bound 0 and exclusive of the upper bond 1, hence it is a bit left-skewed. In other words, [0.0,0.5) is a bigger infinite set of numbers than (0.5,1.0), because the 0.0 is included and the 1.0 is excluded.
+The creatures in our random 3D world currently have touch sensors. Whether a link will have a sensor is defined with the help of a random choice function with a probability of 0.5. 
 
 ## Motor Placements
 
-Similar to sensors, placement of the motors is also decided with the help of a random number generating function and a probability threshold defined as " self.probMotor = 0.7" in Solution.py.
+Motors are placed on the joints of the creatures.
 
 ## Morphospace
 
 ### World
 
-The world is currently empty with no objects present in it except for a 3D plane. The world does contain a gravitational force.
+The world contains a spherical ball on a 3D plane. The world also contains a gravitational force.
 
 ### Creature - Body
 
-The creatures in our random3D world are created using cuboids of random dimensions. 
+The creatures in our random 3D world are created using cuboids of random dimensions. Here's the body plan for our creatures:
 
-![Cuboid faces and the corresponding direction vectors](https://github.com/vTheWise/Artificial_Life/blob/random3D/Diagrams/Cube_Faces.jpg?raw=true)
+![Body Plan](https://github.com/vTheWise/Artificial_Life/blob/randomEvolution/Diagrams/Body_Plan.jpg?raw=true)
 
-The limbs of the creatures are added randomly with the help of a couple of probability thresholds and random number generating functions.
-The variable **self.probExtend** in Solution.py acts as a probability threshold to determine whether the next link will be created on the same face. Similarly another variable **self.probSwitchFace** in the same class works as a probability threshold to determine whether the next link will be created in a different face. A dictionary **self.probNextFace** is defined with the directions (such as, [1,0,0] for front face, [0,-1,0] for left face, etc.) as the keys and a list of self.probExtend and self.probSwitchFace variables as values. The probability of extending in the opposite face is 0. So, if the current link is generated on the front face, the next link cannot be generated in the back face. Similarly, if the current link was generated on the left face, the next link cannot be generated on the right face. This rule preserves the natural growth of the creature avoiding link-intersections and link-pooling.
+Here's a sneak peek into the Create_Body() function used for generating creatures's bodies:
 
-Here are some sample bodies generated by our program:
-
-![Sample body](https://github.com/vTheWise/Artificial_Life/blob/random3D/Diagrams/Sample_Body_1.png?raw=true)
-
-![Sample body](https://github.com/vTheWise/Artificial_Life/blob/random3D/Diagrams/Sample_Body.png?raw=true)
+![Body Plan](https://github.com/vTheWise/Artificial_Life/blob/randomEvolution/Diagrams/Body_Creation_Plan.png?raw=true)
 
 
 ### Creature - Brain
 
-Our creatures contain a brain-like structure consisting of a neural network with sensor and motor neurons. In this network, every sensor neuron is connected with every motor neuron with a synapse having a random weight (later, we'll evolve this creature through multiple generations, so that the synaptic weights can be adjusted for obtaining some desired behavior). Since, we are using a dense/fully-connected layer of neurons, the sensor on one part of the body will also affect the motors on other parts of the body.
+Our creatures contain a brain-like structure consisting of a neural network with sensor and motor neurons. Here's an illustration of how the brain and body of the creatures interact with each other:
 
-![neural network](https://github.com/vTheWise/Artificial_Life/blob/random3D/Diagrams/Brain.jpg?raw=true)
+
+![Brain-Body Control System](https://github.com/vTheWise/Artificial_Life/blob/randomEvolution/Diagrams/Control_System.jpg?raw=true)
+
+
+In this network, every sensor neuron is connected with every motor neuron with a synapse having a random weight. Since, we are using a dense/fully-connected layer of neurons, the sensor on one part of the body will also affect the motors on other parts of the body.
+
+![neural network](https://github.com/vTheWise/Artificial_Life/blob/randomEvolution/Diagrams/Brain.jpg?raw=true)
+
 
 ### Creature - Movement
 
 Our creatures possess hinge joints of "revolution" type, each of which allows for free movement in 2 axes. The placement of joints can be better understood with the help of the following diagram: [source](https://docs.google.com/presentation/d/1zvZzFyTf8PBNjzQZx_gZk84aUntZo2bUKhpe78yT4OY/edit#slide=id.g10dad2fba23_2_428)
 
-![Joints Placement](https://github.com/vTheWise/Artificial_Life/blob/random3D/Diagrams/Joints%20Position.png?raw=true)
+![Joints Placement](https://github.com/vTheWise/Artificial_Life/blob/randomEvolution/Diagrams/Joints%20Position.png?raw=true)
 
-If the link is generated alongside z-axis (direction: [0, 0, 1] or [0, 0, -1]), then the joints on this link can move along the x-y plane. Similarly, if the link is generated alongside y-axis, the movement is allowed along the x-z plane. And, for the links generated alongside x-axis, free movement is allowed along the y-z plane. 
+If the link is generated alongside z-axis (direction: [0, 0, 1] or [0, 0, -1]), then the joints on this link can move along the x-y plane. Similarly, if the link is generated alongside y-axis, the movement is allowed along the x-z plane. And, for the links generated alongside x-axis, free movement is allowed along the y-z plane.
 
-The movement of the joints can be understood with the help of these diagrams:
+In the code, I have randomly picked if our creature should be inspired by reptile designs or mammal designs, based on that the creature's link joints can move either in x-y or x-z plane, respectively. Similarly, a creature with spider legs can move in y-z plane, whereas creatures with quadruped legs can move in x-z plane. This distinction is shown in the body creation plan above.
 
-![Movement Explanation](https://github.com/vTheWise/Artificial_Life/blob/random3D/Diagrams/Link_Movement.png?raw=true)
 
-![Movement Gif](https://github.com/vTheWise/Artificial_Life/blob/random3D/Diagrams/MovementGif.gif?raw=true)
+# Evolution
 
-![Movement Sample](https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOWQ3NmVkY2M0ZWVjY2E3YWFkNDlkZjAxMTIzMjY2MjhlMGFiNWFiNSZjdD1n/N7LBZXHyhtQRicUhzE/giphy.gif)
+Our creatures are evolved for chasing a ball in the 3D world. Here's an illustration of how the evolved creatures differ from the random ones:
+
+![Evolution](https://github.com/vTheWise/Artificial_Life/blob/randomEvolution/Diagrams/Evolution.jpg?raw=true)
+
+Initailly, a population of random creatures is generated. The number of creatures in the population is defined in constants.py as **populationSize**. A parallel hill climbing algorithm is used for evolving the creatures through multiple generations. The number of generations is defined in constants.py as **numberOfGenerations**. The creatures undergo a series of spawning, mutation, evaluation, and selection processes and the best creatures in each generation are selected as parents for reproducing in the next generation. Here's an illustration demonstrating the types of mutations that our creatures can undergo in each generation:
+
+
+![Evolution](https://github.com/vTheWise/Artificial_Life/blob/randomEvolution/Diagrams/Mutation.jpg?raw=true)
 
 
 ## Demo
-[Link to Youtube Video](https://youtube.com/shorts/GbT6Caj4Cys?feature=share)
+[Link to Youtube Video](https://youtube.com)
 
 ## To run the code:
 
@@ -71,7 +89,7 @@ The movement of the joints can be understood with the help of these diagrams:
 > pip install pybullet
 > pip install numpy
 > pip install hide_warnings
-> pip install matplotlib (optional)
+> pip install matplotlib 
 ```
 
 **Steps**
