@@ -28,10 +28,10 @@ class SOLUTION:
         if self.myID == 0:
             self.Create_World()
 
-    def Start_Simulation(self, directOrGUI, isMutation=False):
+    def Start_Simulation(self, directOrGUI, bodyCreated=False):
         self.num_limbs = random.randint(2, 8)
-        if isMutation:
-            self.Create_Child_Body()
+        if bodyCreated:
+            self.Generate_URDF()
         else:
             links, joints = self.Create_Body()
             self.links, self.num_links = links, len(links)
@@ -43,7 +43,7 @@ class SOLUTION:
 
         os.system("python3 simulate.py {0} {1} 2&>runLogs.txt &".format(directOrGUI, str(self.myID)))
 
-    def Create_Child_Body(self):
+    def Generate_URDF(self):
         # generate body's urdf file: suffix: myID
         pyrosim.Start_URDF("data/body{0}.urdf".format(self.myID))
         for link_dict in self.links:
@@ -285,9 +285,6 @@ class SOLUTION:
     def Mutate_Body(self):
         if self.num_links > c.minimumLinks:
             limb_number = 0
-            print('Mutate_Body Enter, Num Sensors::', self.num_sensors)
-            print('Mutate_Body Enter, Num Links::', self.num_links)
-            print('Mutate_Body Enter, Num Joints::', self.num_joints)
             for l in self.links[::-1]:
                 if 'UpperLeg' in l['name']:
                     limb_number = re.findall(r'\d+', l['name'])[0]
@@ -307,9 +304,6 @@ class SOLUTION:
                     self.num_links -= 1
                     self.num_sensors = self.num_sensors - 1 if l['s_flag'] else self.num_sensors
                     break
-        print('Mutate_Body Exit, Num Sensors::', self.num_sensors)
-        print('Mutate_Body Exit, Num Links::', self.num_links)
-        print('Mutate_Body Exit, Num Joints::', self.num_joints)
     def Mutate_Weight_And_Brain(self):
         self.Mutate_Weight()
         self.Mutate_Brain()

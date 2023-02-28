@@ -112,7 +112,7 @@ class PARALLEL_HILL_CLIMBER:
             if generation == 'parents' and p_size in display_idx:
                 solutions[p_size].Start_Simulation("GUI")
             elif generation == 'children':
-                solutions[p_size].Start_Simulation("DIRECT", isMutation=True)
+                solutions[p_size].Start_Simulation("DIRECT", bodyCreated=True)
             else:
                 solutions[p_size].Start_Simulation("DIRECT")
         for p_size in range(c.populationSize):
