@@ -87,10 +87,12 @@ Here are a few fitness curves generated with different random seed values. These
 
 ![Fitness 4](https://github.com/vTheWise/Artificial_Life/blob/randomEvolution/Diagrams/fitness_curve_4.png?raw=true)
 
+![Fitness 5](https://github.com/vTheWise/Artificial_Life/blob/randomEvolution/Diagrams/fitness_curve_5.png?raw=true)
+
 
 
 ## Demo
-[Link to Youtube Video](https://youtube.com)
+[Link to Youtube Video](https://youtube.com/shorts/fKV86nwKcys?feature=share)
 
 ## To run the code:
 
