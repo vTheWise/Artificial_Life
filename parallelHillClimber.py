@@ -104,7 +104,7 @@ class PARALLEL_HILL_CLIMBER:
             for k, v in self.parents.items():
                 if self.parents[k].fitness > best_solution.fitness:
                     best_solution = self.parents[k]
-        best_solution.Start_Simulation("GUI")
+        best_solution.Start_Simulation("GUI", bodyCreated=True)
 
     def Evaluate(self, solutions, generation):
         display_idx = random.choices(range(c.populationSize), k=c.num_simulation_initial_popluation)
