@@ -12,7 +12,7 @@ class ROBOT:
     def __init__(self, solutionID):
         self.solutionID = solutionID
         self.motors = dict()
-        self.robotId = p.loadURDF("data/body{0}.urdf".format(str(self.solutionID)))
+        self.robotId = p.loadURDF("data/body{0}.urdf".format(str(self.solutionID)), flags=p.URDF_USE_SELF_COLLISION)
         pyrosim.Prepare_To_Simulate(self.robotId)
         self.nn = NEURAL_NETWORK("data/brain{0}.nndf".format(str(self.solutionID)))
         self.Prepare_To_Sense()
