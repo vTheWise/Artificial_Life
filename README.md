@@ -1,4 +1,4 @@
-# Artificial_Life -> randomEvolution
+# Artificial_Life
 
 In this version, I've changed the morphospace of the creatures that I created in the branch **random3D**. Additionally, the new creatures are now powered by an evolutionary algorithm that is fueled by a fitness function. The objective of the fitness function is to evolve locomotive capabilities in the creature in a manner that they try to chase a ball present in the 3D world. Creatures try to obtain this objective by minimizing the Euclidean distance between the ball and themselves. Let's say the position of a creature is pos1: [x1, y1, z1] and the position of the ball is pos2: [x2, y2, z2], then the distance between the two can be calculated using Euclidean method: (I've ignored the z-axis since it was not relevant for our creature's movement)
 
