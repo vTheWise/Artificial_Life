@@ -52,19 +52,64 @@ H': Harsh environmental conditions do have positive impact on the evolutionary p
 
 #### World/Environment
 
+The world contains some spherical balls on a 3D plane. The world also contains a gravitational force. In the normal setting, there is no other object in the world. In the "harsh environment" setting, there is a staircase structure present between the creature and the balls. The creature is supposed to either climb the staircases and move towards the balls or learn how to avoid the staircases while moving towards the balls. In the final settings, a different kind of "harsh environment" is introduced. Basically, there are cubes with different masses on the plane, some of them can be moved away, rest of them cannot. Creatures are supposed to either move the cubes away from their path or learn how to avoid them while moving towards the balls.
+
+
 #### Creature - Body
 
 #### Sensor Placements
 
+The creatures in our random 3D world currently have touch sensors. Whether a link will have a sensor is defined with the help of a random choice function with a probability of 0.5.
+
+
 #### Moto Placements
+
+Motors are placed on the joints of the creatures.
 
 #### Creature - Brain
 
+Our creatures contain a brain-like structure consisting of a neural network with sensor and motor neurons.  Here's an illustration of how the brain and body of the creatures interact with each other:
+
+![Brain-Body Control System](https://github.com/vTheWise/Artificial_Life/blob/randomEvolution/Diagrams/Control_System.jpg?raw=true)
+
+In this network, every sensor neuron is connected with every motor neuron with a synapse having a random weight. Since, we are using a dense/fully-connected layer of neurons, the sensor on one part of the body will also affect the motors on other parts of the body.
+
+![neural network](https://github.com/vTheWise/Artificial_Life/blob/randomEvolution/Diagrams/Brain.jpg?raw=true)
+
+
 #### Creature - Movement
+
+Our creatures possess hinge joints of "revolute" type, each of which allows for free movement in 2 axes. The placement of joints can be better understood with the help of the following diagram: [source](https://docs.google.com/presentation/d/1zvZzFyTf8PBNjzQZx_gZk84aUntZo2bUKhpe78yT4OY/edit#slide=id.g10dad2fba23_2_428)
+
+![Joints Placement](https://github.com/vTheWise/Artificial_Life/blob/randomEvolution/Diagrams/Joints%20Position.png?raw=true)
+
+If the link is generated alongside z-axis (direction: [0, 0, 1] or [0, 0, -1]), then the joints on this link can move along the x-y plane. Similarly, if the link is generated alongside y-axis, the movement is allowed along the x-z plane. And, for the links generated alongside x-axis, free movement is allowed along the y-z plane.
+
+
 
 #### Evolution
 
+he objective of the fitness function is to evolve locomotive capabilities in the creature in a manner that they try to chase some balls present in the 3D world. Creatures try to obtain this objective by minimizing the Euclidean distance between the ball and themselves. Let's say the position of a creature is pos1: [x1, y1, z1] and the position of the ball is pos2: [x2, y2, z2], then the distance between the two can be calculated using Euclidean method:
+
+```
+numpy.sqrt((pos1[0] - pos2[0]) ** 2 + (pos1[1] - pos2[1]) ** 2 + (pos1[2] - pos2[2]) ** 2)
+```
+
+The best creatures in the population are searched with the help of parallel hill climbing method.
+
+These new creatures also contain a random number of randomly shaped links with random sensor placement along the links and random motor placement along the joints. The blue color indicates the links without any sensor and the green color indicates the links with a touch sensor.
+
+Here's an illustration of how the evolved creatures differ from the random ones:
+
+![Evolution](https://github.com/vTheWise/Artificial_Life/blob/randomEvolution/Diagrams/Evolution.jpg?raw=true)
+
+
 ##### Parallel Hill Climbing (PHC)
+
+Initailly, a population of random creatures is generated. The number of creatures in the population is defined in constants.py as **populationSize**. A parallel hill climbing algorithm is used for evolving the creatures through multiple generations. The number of generations is defined in constants.py as **numberOfGenerations**. The creatures undergo a series of spawning, mutation, evaluation, and selection processes and the best creatures in each generation are selected as parents for reproducing in the next generation. During each generation, creatures are selected by a direct comparison with their respective parent. Other creatures in the population do not affect the selection process directly. Here's an illustration demonstrating the types of mutations that our creatures can undergo in each generation:
+
+![Evolution](https://github.com/vTheWise/Artificial_Life/blob/randomEvolution/Diagrams/Mutation.jpg?raw=true)
+
 
 ##### Mutations
 
@@ -115,6 +160,12 @@ OR
 ```
 python3 search.py
 ```
+
+## Important Notes
+```
+* For reproducing the selected results, I have added seed values for both the numpy and random modules that I've been using in the program. These seeds are defined in **constant.py** as numpy_seed and random_seed, respectively. They can be changed before running the program.
+```
+
 
 ## References:
 1. This implementation is done as an assignment for the following MSAI course (Winter 2023): [Northwestern University - COMP_SCI 396: Artificial Life](https://www.mccormick.northwestern.edu/computer-science/academics/courses/descriptions/396-2.html). The instructor for this course is: [Dr. Sam Kriegman](https://skriegman.github.io/).
