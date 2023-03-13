@@ -1,4 +1,4 @@
-# Artificial_Life
+# Artificial Life
 
 ## Background
 
