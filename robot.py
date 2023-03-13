@@ -6,6 +6,13 @@ from pyrosim.neuralNetwork import NEURAL_NETWORK
 import os
 import constants as c
 import numpy as np
+import random
+
+#region File Attributes
+# set random seeds
+random.seed(c.random_seed)
+np.random.seed(c.numpy_seed)
+#endregion File Attributes
 
 class ROBOT:
 
@@ -46,7 +53,7 @@ class ROBOT:
         self.nn.Update()
 
     def __dist(self, pos1, pos2):
-        return np.sqrt((pos1[0] - pos2[0]) ** 2 + (pos1[1] - pos2[1]) ** 2)
+        return np.sqrt((pos1[0] - pos2[0]) ** 2 + (pos1[1] - pos2[1]) ** 2 + (pos1[2] - pos2[2]) ** 2)
 
     def Get_Fitness(self, ballId):
         basePositionAndOrientation = p.getBasePositionAndOrientation(self.robotId)
@@ -55,10 +62,11 @@ class ROBOT:
         ball_orientation = p.getBasePositionAndOrientation(ballId)
         ball_position = ball_orientation[0]
 
-        dist = self.__dist(ball_position, basePosition)
+        # distance from the ball
+        dist1 = self.__dist(ball_position, basePosition)
 
         with open('data/tmp{0}.txt'.format(str(self.solutionID)), 'w') as f:
-            f.write(str(-1 * dist))
+            f.write(str(-1 * dist1))
             f.close()
         os.system("mv data/tmp{0}.txt data/fitness{0}.txt".format(str(self.solutionID)))
 

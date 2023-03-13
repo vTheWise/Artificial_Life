@@ -78,7 +78,25 @@ class SOLUTION:
 
     def Create_World(self):
         pyrosim.Start_SDF("data/world.sdf")
-        pyrosim.Send_Sphere(name="Ball", pos=c.ball_pos, size=[0.75])
+        ball_pos = c.ball_pos
+        for i in range(10):
+            pyrosim.Send_Sphere(name="Ball{0}".format(str(i)), pos=ball_pos, size=[1])
+            ball_pos = np.add(ball_pos, [-3, 0, 0])
+
+
+        # delta_y, delta_z = 1.5, 0.2
+        # init_y = c.stair_pos
+        # mass = 30.0
+        # pyrosim.Send_Cube(name="Box1", pos=[-5, init_y + delta_y * 0.5, delta_z / 2.0], size=[30, delta_y, delta_z],
+        #                   mass=mass)
+        # pyrosim.Send_Cube(name="Box2", pos=[-5, init_y + delta_y * 1.5,  (delta_z * 2) / 2.0],
+        #                   size=[30, delta_y, delta_z * 2], mass=mass)
+        # pyrosim.Send_Cube(name="Box3", pos=[-5, init_y + delta_y * 2.5, (delta_z * 3) / 2.0],
+        #                   size=[30, delta_y,  delta_z * 3], mass=mass)
+        # pyrosim.Send_Cube(name="Box4", pos=[-5, init_y + delta_y * 3.5, (delta_z * 4) / 2.0],
+        #                   size=[30, delta_y,  delta_z * 4], mass=mass)
+        # pyrosim.Send_Cube(name="Box5", pos=[-5, init_y + delta_y * 4.5,  (delta_z * 5) / 2.0],
+        #                   size=[30, delta_y, delta_z * 5], mass=mass)
         pyrosim.End()
 
     def Set_ID(self, nextAvailableID):
@@ -328,16 +346,13 @@ class SOLUTION:
         if random.random() < self.mutateBodyProb:
 
             if random.random() < self.addLinkProb and self.num_limbs < self.max_limbs:
-                self.addLinkMutation()
-
-            elif random.random() < self.removeLinkProb and self.num_limbs > self.min_limbs:
-                self.removeLinkMutation()
+                self.mutateBody()
 
             if random.random() < self.addSensorProb:
-                self.addSensorRandom()
+                self.addSensor()
 
             elif random.random() < self.removeSensorProb:
-                self.removeSensorRandom()
+                self.removeSensor()
 
         if random.random() < self.mutateBrainProb:
             row = random.randint(0, self.weights.shape[0] - 1)
@@ -349,7 +364,7 @@ class SOLUTION:
         if self.mutateBrainProb < 0.8 and random.random() < 0.5:
             self.mutateBrainProb += 0.1
 
-    def addSensorRandom(self):
+    def addSensor(self):
         noSensorIdx = []
         for i in range(len(self.isSensorArray)):
             if self.isSensorArray[i] == 0:
@@ -367,7 +382,7 @@ class SOLUTION:
         self.numSensorNeurons += 1
         return True
 
-    def removeSensorRandom(self):
+    def removeSensor(self):
         pos = 0
         sensorInfo = dict()
         for i in range(len(self.isSensorArray)):
@@ -386,15 +401,19 @@ class SOLUTION:
         self.numSensorNeurons -= 1
         return True
 
-    def addLinkMutation(self):
+    def mutateBody(self):
+        existingLinks = []
+        for link in self.links:
+            existingLinks.append(int(link.linkName))
+        maxLink = max(existingLinks)
         self.num_limbs += 1
-        lastIdx = self.num_limbs - 1
-        joint, parent_idx, face = self.addJoint(lastIdx)
-        cube = self.addLink(lastIdx, joint, face, parent_idx)
+        newLink = maxLink + 1
+        joint, parent_idx, face = self.addJoint(newLink)
+        cube = self.addLink(newLink, joint, face, parent_idx)
 
         while self.isIntersecting(cube):
-            joint, parent_idx, face = self.addJoint(lastIdx)
-            cube = self.addLink(lastIdx, joint, face, parent_idx)
+            joint, parent_idx, face = self.addJoint(newLink)
+            cube = self.addLink(newLink, joint, face, parent_idx)
 
         newWeights = np.random.rand(self.numSensorNeurons, self.numMotorNeurons + 1)
         newWeights[:, :self.numMotorNeurons] = self.weights
@@ -403,7 +422,7 @@ class SOLUTION:
         self.numMotorNeurons += 1
 
         self.isSensorArray.append(random.randint(0, 1))
-        if self.isSensorArray[lastIdx]:
+        if self.isSensorArray[-1]:
             cube.setColor(c.color_sensor_link, c.rgba_sensor_link)
             newWeights = np.random.rand(self.numSensorNeurons + 1, self.numMotorNeurons)
             newWeights[:self.numSensorNeurons, :] = self.weights
@@ -412,30 +431,6 @@ class SOLUTION:
             self.numSensorNeurons += 1
         self.links.append(cube)
         self.joints.append(joint)
-
-    def removeLinkMutation(self):
-        pass
-        # parentJointLinks = []
-        # for joint in self.joints:
-        #     parentJointLinks.append(joint.parentLink)
-        # for idx, link in enumerate(self.links):
-        #     if link.linkName not in parentJointLinks:        # safe to remove
-        #         self.links.remove(link)
-        #         self.num_limbs -= 1
-        #         sensor_idx = self.isSensorArray.pop(int(link.linkName))
-        #         self.numSensorNeurons = self.numSensorNeurons - 1 if link.color == c.color_sensor_link \
-        #             else self.numSensorNeurons
-        #         # remove corresponding joints
-        #         for joint in self.joints:
-        #             if joint.childLink == link.linkName:
-        #                 self.joints.remove(joint)
-        #                 self.numMotorNeurons -= 1
-        #         self.weights = np.delete(self.weights, idx-1, 1)
-        #         if link.color == c.color_sensor_link:
-        #             sensor_pos = sum(self.isSensorArray[:sensor_idx])
-        #             self.weights = np.delete(self.weights, sensor_pos, 0)
-        #         break
-
 
 
 
