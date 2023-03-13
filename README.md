@@ -35,15 +35,52 @@ One possible explanation can be given in terms of ‘‘evolutionary arms races"
 ### Null Hypothesis
 
 ```
-H<sub>0</sub>
+H0: Harsh environmental conditions do not have any positive impact on the evolutionary process.
 ```
 
 ### Alternate Hypothesis
 
 ```
+H': Harsh environmental conditions do have positive impact on the evolutionary process.
 ```
 
+## Method 
 
+## An Introduction to Our Simulated World and its Creatures
+
+### Morpho-space
+
+#### World/Environment
+
+#### Creature - Body
+
+#### Sensor Placements
+
+#### Moto Placements
+
+#### Creature - Brain
+
+#### Creature - Movement
+
+#### Evolution
+
+##### Parallel Hill Climbing (PHC)
+
+##### Mutations
+
+## Results
+
+## Demo
+
+### Teaser (10 sec, GIF)
+
+### Summary (2 mins, video)
+
+### B-Roll (Extra Footage of Random and Evolved Creatures)
+
+## Further Discussion
+
+## Conclusion
 
 
 ## To run the code:
