@@ -18,6 +18,8 @@ Biologists studying the problem had created a more complicated, multidimensional
 
 But, if hill climbing was indeed the method nature used to achieve higher fitness, the discovery of the highest ground could not always be assumed. Once the population scaled a medium-size peak, it tended to get stuck. This was due to the built-in reluctance of a population to decrease its fitness, which would be necessary in order to search the landscape for an even higher peak. The population would remain fat and happy on its hill but miss out on the mountains that lay somewhere else on the chart. The population was then “stuck on a local maximum” with no incentive to make the giant evolutionary leaps that push life toward more complexity.
 
+![Local Maxima](https://github.com/vTheWise/Artificial_Life/blob/finalProject/Diagrams/local_optima.png?raw=true)
+
 “If evolution is a hill-climbing technique, why doesn’t it seem to have problems that we know hill-climbing techniques suffer from?” ‘‘Why is evolution so much more powerful than any other hill-climbing technique? Why is it able to evolve much more complicated things?”
 
 One possible explanation can be given in terms of ‘‘evolutionary arms races" -  a situation where two populations of differing species were set against each other, in predator-prey or host-parasite relationships. If a host population Evolved strategic traits to foil the parasite, the parasite would in turn evolve a strategy to compensate and the cycle would continue causing continuous improvements (i.e., evolution!). William Hamilton, among others, had suggested that the presence of parasites might have been integral in accelerating the pace of evolution to a rate capable of yielding its present diversity and complexity.
