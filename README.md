@@ -46,6 +46,8 @@ H': Harsh environmental conditions do have positive impact on the evolutionary p
 
 ## Method 
 
+In order to test my hypothesis, I followed a controlled testing set-up. I first ran an evolutionary search (PHC - details are mentioned below) for 500 generations with a population size of 10. The environment was plain and simple without any obstacles. The fitness objective for the creatures was to go as close to the balls as possible. I ran this evolutionary process 5 times using a different random seed each time. I saved the best creatures from every run (the corresponding pickle files are available in the **saved_creatures** folder. Next, keeping everything exactly the same, I ran the evolutionary process for another set of 5 times (the random seeds were the same that I used for the previous 5 runs). The only difference this time was that there was an obstacle in the shape of staircases between the creatures and the balls. This can. be seen as a control-group for testing my hypothesis. The creatures were supposed to learn how to reach to the balls avoiding/climbing the obstacle. Again I saved the best creatures from each run. Finally, I created a new world/environment with different kinds of obstacles in it and tested the saved best creatures from the original experiment as well as the control-group experiment. The results are presented below followed by a short discussion. 
+
 ## An Introduction to Our Simulated World and its Creatures
 
 ### Morpho-space
