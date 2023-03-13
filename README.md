@@ -91,7 +91,7 @@ If the link is generated alongside z-axis (direction: [0, 0, 1] or [0, 0, -1]), 
 
 
 
-#### Evolution
+#### Evolution (Parallel Hill Climbing)
 
 he objective of the fitness function is to evolve locomotive capabilities in the creature in a manner that they try to chase some balls present in the 3D world. Creatures try to obtain this objective by minimizing the Euclidean distance between the ball and themselves. Let's say the position of a creature is pos1: [x1, y1, z1] and the position of the ball is pos2: [x2, y2, z2], then the distance between the two can be calculated using Euclidean method:
 
@@ -108,14 +108,10 @@ Here's an illustration of how the evolved creatures differ from the random ones:
 ![Evolution](https://github.com/vTheWise/Artificial_Life/blob/randomEvolution/Diagrams/Evolution.jpg?raw=true)
 
 
-##### Parallel Hill Climbing (PHC)
-
 Initailly, a population of random creatures is generated. The number of creatures in the population is defined in constants.py as **populationSize**. A parallel hill climbing algorithm is used for evolving the creatures through multiple generations. The number of generations is defined in constants.py as **numberOfGenerations**. The creatures undergo a series of spawning, mutation, evaluation, and selection processes and the best creatures in each generation are selected as parents for reproducing in the next generation. During each generation, creatures are selected by a direct comparison with their respective parent. Other creatures in the population do not affect the selection process directly. Here's an illustration demonstrating the types of mutations that our creatures can undergo in each generation:
 
 ![Evolution](https://github.com/vTheWise/Artificial_Life/blob/randomEvolution/Diagrams/Mutation.jpg?raw=true)
 
-
-##### Mutations
 
 ## Results
 
