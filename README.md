@@ -62,7 +62,7 @@ The world contains some spherical balls on a 3D plane. The world also contains a
 The creatures in our random 3D world currently have touch sensors. Whether a link will have a sensor is defined with the help of a random choice function with a probability of 0.5.
 
 
-#### Moto Placements
+#### Motor Placements
 
 Motors are placed on the joints of the creatures.
 
