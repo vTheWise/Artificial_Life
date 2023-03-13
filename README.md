@@ -11,13 +11,21 @@ Christopher Langton defines artificial life as 'The study of natural life, where
 
 One biological theorem, postulated by R. A. Fisher, conjectured that evolution proceeded by steady improvements in fitness. This is an equivalent to the so-called hill climbing technique used by certain computer optimization procedures, such as learning in neural network simulations. Because each generation was supposedly slightly fitter than the previous one, a graph illustrating this progress would show line angling upward, as though the fitness of the species were engaged in scaling a peak. 
 
+![Evolutionary Hill Climbing](https://github.com/vTheWise/Artificial_Life/blob/randomEvolution/Diagrams/hill_climbing.png?raw=true)
+
+
 Biologists studying the problem had created a more complicated, multidimensional map of the way that a species might evolve. This “adaptive landscape,”’ first postulated by Sewall Wright, represented the space of all possible genetic combinations. It was filled with bumps, peaks, valleys, and spikes. The gene pool of an entire population resided at a single area on this landscape. The higher the ground, the fitter the population would be if it found its way there. When the terrain was fairly level, a population theoretically engaged in a “random walk,”’ with the effects of crossover and mutation moving its genetic composition to different places, until it found an ascending plane. From that point, the more fit individuals within the population would push fitness higher, and the rest of the population would follow. 
 
 But, if hill climbing was indeed the method nature used to achieve higher fitness, the discovery of the highest ground could not always be assumed. Once the population scaled a medium-size peak, it tended to get stuck. This was due to the built-in reluctance of a population to decrease its fitness, which would be necessary in order to search the landscape for an even higher peak. The population would remain fat and happy on its hill but miss out on the mountains that lay somewhere else on the chart. The population was then “stuck on a local maximum” with no incentive to make the giant evolutionary leaps that push life toward more complexity.
 
+![Local Maxima](https://github.com/vTheWise/Artificial_Life/blob/randomEvolution/Diagrams/local_optima.png?raw=true)
+
 “If evolution is a hill-climbing technique, why doesn’t it seem to have problems that we know hill-climbing techniques suffer from?” ‘‘Why is evolution so much more powerful than any other hill-climbing technique? Why is it able to evolve much more complicated things?”
 
 One possible explanation can be given in terms of ‘‘evolutionary arms races" -  a situation where two populations of differing species were set against each other, in predator-prey or host-parasite relationships. If a host population Evolved strategic traits to foil the parasite, the parasite would in turn evolve a strategy to compensate and the cycle would continue causing continuous improvements (i.e., evolution!). William Hamilton, among others, had suggested that the presence of parasites might have been integral in accelerating the pace of evolution to a rate capable of yielding its present diversity and complexity.
+
+
+![Coevolution](https://github.com/vTheWise/Artificial_Life/blob/randomEvolution/Diagrams/coevolution.jpg?raw=true)
 
 **This chain of thoughts led me to question the role of environmental hardships in shaping the path of evolution. I wondered if the creatures who have to face harsh environmental conditions evolve better than those who do not.**
 
