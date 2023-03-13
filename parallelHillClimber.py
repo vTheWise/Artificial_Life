@@ -8,6 +8,7 @@ from matplotlib import ticker
 import numpy as np
 import statistics
 from itertools import chain
+import pickle
 
 
 random.seed(c.random_seed)
@@ -67,6 +68,11 @@ class PARALLEL_HILL_CLIMBER:
 
     def Plot_Fitness(self):
         if self.fitnessValues:
+            with open('data/tmp{0}_{1}.pkl'.format(str(c.random_seed), str(c.numpy_seed)), 'wb') as f:
+                pickle.dump(self.fitnessValues, f)
+                f.close()
+            os.system("mv data/tmp{0}_{1}.txt data/fitnessValues{0}_{1}.pkl".format(str(c.random_seed), str(c.numpy_seed)))
+
             generations = [i for i in range(c.numberOfGenerations)]
             fig, ax = plt.subplots(1, 1)
             fig.set_size_inches(20, 10)
