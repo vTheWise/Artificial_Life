@@ -30,6 +30,20 @@ One possible explanation can be given in terms of ‘‘evolutionary arms races"
 **This chain of thoughts led me to question the role of environmental hardships in shaping the path of evolution. I wondered if the creatures who have to face harsh environmental conditions evolve better than those who do not.**
 
 
+## Hypothesis
+
+### Null Hypothesis
+
+```
+H<sub>0</sub>
+```
+
+### Alternate Hypothesis
+
+```
+```
+
+
 
 
 ## To run the code:
