@@ -38,7 +38,7 @@ One possible explanation can be given in terms of ‘‘evolutionary arms races"
 H0: Harsh environmental conditions do not have any positive impact on the evolutionary process.
 ```
 
-### Alternate Hypothesis
+### Alternative Hypothesis
 
 ```
 H': Harsh environmental conditions do have positive impact on the evolutionary process.
