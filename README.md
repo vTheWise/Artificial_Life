@@ -99,18 +99,26 @@ he objective of the fitness function is to evolve locomotive capabilities in the
 numpy.sqrt((pos1[0] - pos2[0]) ** 2 + (pos1[1] - pos2[1]) ** 2 + (pos1[2] - pos2[2]) ** 2)
 ```
 
-The best creatures in the population are searched with the help of parallel hill climbing method.
+The best creatures in the population are searched with the help of parallel hill climbing method. These new creatures also contain a random number of randomly shaped links with random sensor placement along the links and random motor placement along the joints. The blue color indicates the links without any sensor and the green color indicates the links with a touch sensor.
 
-These new creatures also contain a random number of randomly shaped links with random sensor placement along the links and random motor placement along the joints. The blue color indicates the links without any sensor and the green color indicates the links with a touch sensor.
+Here's a flow diagram depicting different stages:
+
+![PHC](https://github.com/vTheWise/Artificial_Life/blob/finalProject/Diagrams/phc.jpg?raw=true)
+
+Initailly, a population of random creatures is generated. The number of creatures in the population is defined in constants.py as **populationSize**. A parallel hill climbing algorithm is used for evolving the creatures through multiple generations. The number of generations is defined in constants.py as **numberOfGenerations**. The creatures undergo a series of spawning, mutation, evaluation, and selection processes and the best creatures in each generation are selected as parents for reproducing in the next generation. During each generation, creatures are selected by a direct comparison with their respective parent. Other creatures in the population do not affect the selection process directly. The selection process can be understood with the help of the following diagram:
+
+![Selection](https://github.com/vTheWise/Artificial_Life/blob/finalProject/Diagrams/selection.jpg?raw=true)
+
+
+ Here's an illustration demonstrating the types of mutations that our creatures can undergo in each generation:
+
+![Mutations](https://github.com/vTheWise/Artificial_Life/blob/randomEvolution/Diagrams/Mutation.jpg?raw=true)
+
 
 Here's an illustration of how the evolved creatures differ from the random ones:
 
 ![Evolution](https://github.com/vTheWise/Artificial_Life/blob/randomEvolution/Diagrams/Evolution.jpg?raw=true)
 
-
-Initailly, a population of random creatures is generated. The number of creatures in the population is defined in constants.py as **populationSize**. A parallel hill climbing algorithm is used for evolving the creatures through multiple generations. The number of generations is defined in constants.py as **numberOfGenerations**. The creatures undergo a series of spawning, mutation, evaluation, and selection processes and the best creatures in each generation are selected as parents for reproducing in the next generation. During each generation, creatures are selected by a direct comparison with their respective parent. Other creatures in the population do not affect the selection process directly. Here's an illustration demonstrating the types of mutations that our creatures can undergo in each generation:
-
-![Evolution](https://github.com/vTheWise/Artificial_Life/blob/randomEvolution/Diagrams/Mutation.jpg?raw=true)
 
 
 ## Results
