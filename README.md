@@ -152,10 +152,16 @@ Fitness in the new world:
 
 ## Discussion
 
+Looking at the fitness graph, we can see that the creatures who were evolved with obstacles, peaked earlier as compared to the creatures who were evolved without any obstacles. In other words, creatures with obstacles reached to a higher fitness in earlier generations and maintained their peak fitness throughout the evolution. 
+
+**Now, the moment of truth - comparing the fitness values of the best creatures from the original environment and the best creatures from the obstacle world, we can see in the stacked bar graph that the creatures from the obstacle world clearly outperformed those from the original environment. Remember from our experimental setup that both the classes of creatures were exactly the same except for the fact that the original world didn't have any obstacle in it, whereas the second world had a staircase in the middle acting as an obstacle. But, as we can see there's a stark difference in the fitness of these creatures in an entirely new world. Based on this observation, we can say that the obstacles in the world made the second set of creatures more robust to dynamic environments, and hence they outperformed their peers who grew up without any obstacles. 
+Therefore, we can reject the null hypothesis ("H0: Harsh environmental conditions do not have any positive impact on the evolutionary process."). Clearly, harsh environmental conditions do have positive impact on the evolutionary process.**
 
 
 ## Conclusion
 
+In this experiment, we rejected the null hypothesis based on the imperical evidences in support of our alternative hypothesis.
+This is pretty interesting to know that the hardships of the environment during evolution made our creatures robust to perform well in a dynamic world.
 
 ## To run the code:
 
