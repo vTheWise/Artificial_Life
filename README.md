@@ -162,6 +162,8 @@ Therefore, we can reject the null hypothesis ("H0: Harsh environmental condition
 
 In this experiment, we rejected the null hypothesis based on the imperical evidences in support of our alternative hypothesis.
 This is pretty interesting to know that the hardships of the environment during evolution made our creatures robust to perform well in a dynamic world.
+However, there's still a lot more to explore in this domain. For example, it would be exciting to let the best creatures from both the worlds evolve in the new environment and see if there's any impact on the evolutionary process - if one of the creatures adapts faster, for instance. Even more interesting scenarios can be designed if both set of creatures are evolved simultaneously in the new environment - What if we evolved both species with multiple fitness functions - some of which may actually be contradictory increasing the conflicts between the species? Would one species fight the other till death? Would one of them will eventually go extinct? Will they combine and create a new life form? - there are several such possibilities.
+
 
 ## To run the code:
 
