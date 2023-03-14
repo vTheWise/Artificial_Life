@@ -129,7 +129,15 @@ Here's an illustration of how the evolved creatures differ from the random ones:
 
 ## Results
 
-## Demo
+### Plots
+
+Best fitness in each generation:
+
+![best fitness](https://github.com/vTheWise/Artificial_Life/blob/finalProject/Diagrams/fitness_curve_best.png?raw=true)
+
+Average fitness in each generation:
+
+![avg fitness](https://github.com/vTheWise/Artificial_Life/blob/finalProject/Diagrams/fitness_curve_avg.png?raw=true)
 
 ### Teaser (10 sec, GIF)
 
