@@ -52,29 +52,27 @@ In order to test my hypothesis, I followed a controlled testing set-up. I first 
 
 ## An Introduction to Our Simulated World and its Creatures
 
-### Morpho-space
-
-#### World/Environment
+### World/Environment
 
 The world contains some spherical balls on a 3D plane. The world also contains a gravitational force. In the normal setting, there is no other object in the world. In the "harsh environment" setting, there is a staircase structure present between the creature and the balls. The creature is supposed to either climb the staircases and move towards the balls or learn how to avoid the staircases while moving towards the balls. In the final settings, a different kind of "harsh environment" is introduced. Basically, there are cubes with different masses on the plane, some of them can be moved away, rest of them cannot. Creatures are supposed to either move the cubes away from their path or learn how to avoid them while moving towards the balls.
 
 
-#### Creature - Body
+### Creature - Body
 
 Our creatures are made up of cubes of different sizes. Here's the body plan used for generating a typical creature:
 
 ![Body Plan](https://github.com/vTheWise/Artificial_Life/blob/finalProject/Diagrams/Body_Plan.png?raw=true)
 
-#### Sensor Placements
+### Sensor Placements
 
 The creatures in our random 3D world currently have touch sensors. Whether a link will have a sensor is defined with the help of a random choice function with a probability of 0.5.
 
 
-#### Motor Placements
+### Motor Placements
 
 Motors are placed on the joints of the creatures.
 
-#### Creature - Brain
+### Creature - Brain
 
 Our creatures contain a brain-like structure consisting of a neural network with sensor and motor neurons.  Here's an illustration of how the brain and body of the creatures interact with each other:
 
@@ -85,7 +83,7 @@ In this network, every sensor neuron is connected with every motor neuron with a
 ![neural network](https://github.com/vTheWise/Artificial_Life/blob/finalProject/Diagrams/Brain.jpg?raw=true)
 
 
-#### Creature - Movement
+### Creature - Movement
 
 Our creatures possess hinge joints of "revolute" type, each of which allows for free movement in 2 axes. The placement of joints can be better understood with the help of the following diagram: [source](https://docs.google.com/presentation/d/1zvZzFyTf8PBNjzQZx_gZk84aUntZo2bUKhpe78yT4OY/edit#slide=id.g10dad2fba23_2_428)
 
@@ -94,8 +92,7 @@ Our creatures possess hinge joints of "revolute" type, each of which allows for 
 If the link is generated alongside z-axis (direction: [0, 0, 1] or [0, 0, -1]), then the joints on this link can move along the x-y plane. Similarly, if the link is generated alongside y-axis, the movement is allowed along the x-z plane. And, for the links generated alongside x-axis, free movement is allowed along the y-z plane.
 
 
-
-#### Evolution (Parallel Hill Climbing)
+### Evolution (Parallel Hill Climbing)
 
 he objective of the fitness function is to evolve locomotive capabilities in the creature in a manner that they try to chase some balls present in the 3D world. Creatures try to obtain this objective by minimizing the Euclidean distance between the ball and themselves. Let's say the position of a creature is pos1: [x1, y1, z1] and the position of the ball is pos2: [x2, y2, z2], then the distance between the two can be calculated using Euclidean method:
 
