@@ -61,6 +61,11 @@ The world contains some spherical balls on a 3D plane. The world also contains a
 
 #### Creature - Body
 
+Our creatures are made up of cubes of different sizes. Here's the body plan used for generating a typical creature:
+
+![Body Plan](https://github.com/vTheWise/Artificial_Life/blob/randomEvolution/Diagrams/Body_Plan.png?raw=true)
+
+
 #### Sensor Placements
 
 The creatures in our random 3D world currently have touch sensors. Whether a link will have a sensor is defined with the help of a random choice function with a probability of 0.5.
