@@ -48,6 +48,8 @@ H': Harsh environmental conditions do have positive impact on the evolutionary p
 
 In order to test my hypothesis, I followed a controlled testing set-up. I first ran an evolutionary search (PHC - details are mentioned below) for 500 generations with a population size of 10. The environment was plain and simple without any obstacles. The fitness objective for the creatures was to go as close to the balls as possible. I ran this evolutionary process 5 times using a different random seed each time. I saved the best creatures from every run (the corresponding pickle files are available in the **saved_creatures** folder. Next, keeping everything exactly the same, I ran the evolutionary process for another set of 5 times (the random seeds were the same that I used for the previous 5 runs). The only difference this time was that there was an obstacle in the shape of staircases between the creatures and the balls. This can. be seen as a control-group for testing my hypothesis. The creatures were supposed to learn how to reach to the balls avoiding/climbing the obstacle. Again I saved the best creatures from each run. Finally, I created a new world/environment with different kinds of obstacles in it and tested the saved best creatures from the original experiment as well as the control-group experiment. The results are presented below followed by a short discussion. 
 
+![Method](https://github.com/vTheWise/Artificial_Life/blob/finalProject/Diagrams/method.jpg?raw=true)
+
 ## An Introduction to Our Simulated World and its Creatures
 
 ### Morpho-space
@@ -89,7 +91,7 @@ If the link is generated alongside z-axis (direction: [0, 0, 1] or [0, 0, -1]), 
 
 
 
-#### Evolution
+#### Evolution (Parallel Hill Climbing)
 
 he objective of the fitness function is to evolve locomotive capabilities in the creature in a manner that they try to chase some balls present in the 3D world. Creatures try to obtain this objective by minimizing the Euclidean distance between the ball and themselves. Let's say the position of a creature is pos1: [x1, y1, z1] and the position of the ball is pos2: [x2, y2, z2], then the distance between the two can be calculated using Euclidean method:
 
@@ -106,14 +108,10 @@ Here's an illustration of how the evolved creatures differ from the random ones:
 ![Evolution](https://github.com/vTheWise/Artificial_Life/blob/randomEvolution/Diagrams/Evolution.jpg?raw=true)
 
 
-##### Parallel Hill Climbing (PHC)
-
 Initailly, a population of random creatures is generated. The number of creatures in the population is defined in constants.py as **populationSize**. A parallel hill climbing algorithm is used for evolving the creatures through multiple generations. The number of generations is defined in constants.py as **numberOfGenerations**. The creatures undergo a series of spawning, mutation, evaluation, and selection processes and the best creatures in each generation are selected as parents for reproducing in the next generation. During each generation, creatures are selected by a direct comparison with their respective parent. Other creatures in the population do not affect the selection process directly. Here's an illustration demonstrating the types of mutations that our creatures can undergo in each generation:
 
 ![Evolution](https://github.com/vTheWise/Artificial_Life/blob/randomEvolution/Diagrams/Mutation.jpg?raw=true)
 
-
-##### Mutations
 
 ## Results
 
