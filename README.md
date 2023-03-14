@@ -63,6 +63,11 @@ Our creatures are made up of cubes of different sizes. Here's the body plan used
 
 ![Body Plan](https://github.com/vTheWise/Artificial_Life/blob/finalProject/Diagrams/Body_Plan.png?raw=true)
 
+It's difficult to imagine all types of possible creature bodies, since our program randomly generates the morphologies. However, the following diagram captures the essence of the genotype of our creatures:
+
+![Body](https://github.com/vTheWise/Artificial_Life/blob/finalProject/Diagrams/body.jpg?raw=true)
+
+
 ### Sensor Placements
 
 The creatures in our random 3D world currently have touch sensors. Whether a link will have a sensor is defined with the help of a random choice function with a probability of 0.5.
