@@ -1,5 +1,11 @@
 # Artificial Life
 
+## Teaser (10 sec, GIF)
+
+## Summary (2 mins, video)
+
+## B-Roll (Extra Footage of Random and Evolved Creatures)
+
 ## Background
 
 "Progress in physics comes by taking things apart; in computation by putting things together. We might have had an analytic science of computation, but
@@ -142,12 +148,6 @@ Average fitness in each generation:
 ## Discussion
 
 ## Conclusion
-
-### Teaser (10 sec, GIF)
-
-### Summary (2 mins, video)
-
-### B-Roll (Extra Footage of Random and Evolved Creatures)
 
 
 ## To run the code:
