@@ -145,6 +145,10 @@ Average fitness in each generation:
 
 ![avg fitness](https://github.com/vTheWise/Artificial_Life/blob/finalProject/Diagrams/fitness_curve_avg.png?raw=true)
 
+Fitness in the new world:
+
+![new world fitness](https://github.com/vTheWise/Artificial_Life/blob/finalProject/Diagrams/new_world_evaluate.png?raw=true)
+
 
 ## Discussion
 
