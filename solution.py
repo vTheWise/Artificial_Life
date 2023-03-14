@@ -84,19 +84,19 @@ class SOLUTION:
             ball_pos = np.add(ball_pos, [-3, 0, 0])
 
 
-        # delta_y, delta_z = 1.5, 0.2
-        # init_y = c.stair_pos
-        # mass = 30.0
-        # pyrosim.Send_Cube(name="Box1", pos=[-5, init_y + delta_y * 0.5, delta_z / 2.0], size=[30, delta_y, delta_z],
-        #                   mass=mass)
-        # pyrosim.Send_Cube(name="Box2", pos=[-5, init_y + delta_y * 1.5,  (delta_z * 2) / 2.0],
-        #                   size=[30, delta_y, delta_z * 2], mass=mass)
-        # pyrosim.Send_Cube(name="Box3", pos=[-5, init_y + delta_y * 2.5, (delta_z * 3) / 2.0],
-        #                   size=[30, delta_y,  delta_z * 3], mass=mass)
-        # pyrosim.Send_Cube(name="Box4", pos=[-5, init_y + delta_y * 3.5, (delta_z * 4) / 2.0],
-        #                   size=[30, delta_y,  delta_z * 4], mass=mass)
-        # pyrosim.Send_Cube(name="Box5", pos=[-5, init_y + delta_y * 4.5,  (delta_z * 5) / 2.0],
-        #                   size=[30, delta_y, delta_z * 5], mass=mass)
+        delta_y, delta_z = 1.5, 0.2
+        init_y = c.stair_pos
+        mass = 50.0
+        pyrosim.Send_Cube(name="Box1", pos=[-5, init_y + delta_y * 0.5, delta_z / 2.0], size=[50, delta_y, delta_z],
+                          mass=mass)
+        pyrosim.Send_Cube(name="Box2", pos=[-5, init_y + delta_y * 1.5,  (delta_z * 2) / 2.0],
+                          size=[50, delta_y, delta_z * 2], mass=mass)
+        pyrosim.Send_Cube(name="Box3", pos=[-5, init_y + delta_y * 2.5, (delta_z * 3) / 2.0],
+                          size=[50, delta_y,  delta_z * 3], mass=mass)
+        pyrosim.Send_Cube(name="Box4", pos=[-5, init_y + delta_y * 3.5, (delta_z * 4) / 2.0],
+                          size=[50, delta_y,  delta_z * 4], mass=mass)
+        pyrosim.Send_Cube(name="Box5", pos=[-5, init_y + delta_y * 4.5,  (delta_z * 5) / 2.0],
+                          size=[50, delta_y, delta_z * 5], mass=mass)
         pyrosim.End()
 
     def Set_ID(self, nextAvailableID):
@@ -294,8 +294,6 @@ class SOLUTION:
                                    position=joint.jointPos, jointAxis=joint.jointAxis)
 
             pyrosim.End()
-            # while not os.path.exists("data/body{0}.urdf".format(self.myID)):
-            #     time.sleep(0.01)
 
         else:   # update existing body
             for idx in range(len(self.isSensorArray)):
@@ -314,8 +312,6 @@ class SOLUTION:
                                    position=joint.jointPos, jointAxis=joint.jointAxis)
 
             pyrosim.End()
-            # while not os.path.exists("data/body{0}.urdf".format(self.myID)):
-            #     time.sleep(0.01)
 
     def Create_Brain(self):
         pyrosim.Start_NeuralNetwork("data/brain{0}.nndf".format(self.myID))
@@ -338,8 +334,6 @@ class SOLUTION:
                                      weight=self.weights[currentRow][currentCol])
 
         pyrosim.End()
-        # while pyrosim.Start_NeuralNetwork("data/brain{0}.nndf".format(self.myID)):
-        #     time.sleep(0.01)
 
     def Mutate(self):
 
@@ -431,6 +425,29 @@ class SOLUTION:
             self.numSensorNeurons += 1
         self.links.append(cube)
         self.joints.append(joint)
+
+    def removeLink(self):
+        parentJointLinks = []
+        for joint in self.joints:
+            parentJointLinks.append(joint.parentLink)
+        for idx, link in enumerate(self.links):
+            if link.linkName not in parentJointLinks:        # safe to remove
+                self.links.remove(link)
+                self.num_limbs -= 1
+                sensor_idx = self.isSensorArray.pop(int(link.linkName))
+                self.numSensorNeurons = self.numSensorNeurons - 1 if link.color == c.color_sensor_link \
+                    else self.numSensorNeurons
+                # remove corresponding joints
+                for joint in self.joints:
+                    if joint.childLink == link.linkName:
+                        self.joints.remove(joint)
+                        self.numMotorNeurons -= 1
+                self.weights = np.delete(self.weights, idx-1, 1)
+                if link.color == c.color_sensor_link:
+                    sensor_pos = sum(self.isSensorArray[:sensor_idx])
+                    self.weights = np.delete(self.weights, sensor_pos, 0)
+                break
+
 
 
 

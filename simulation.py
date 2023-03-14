@@ -40,3 +40,6 @@ class SIMULATION:
     def Get_Fitness(self):
         self.robot.Get_Fitness(self.world.ballId[0])
 
+    def __del__(self):
+        p.disconnect()
+
