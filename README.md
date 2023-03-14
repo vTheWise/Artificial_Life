@@ -139,15 +139,15 @@ Average fitness in each generation:
 
 ![avg fitness](https://github.com/vTheWise/Artificial_Life/blob/finalProject/Diagrams/fitness_curve_avg.png?raw=true)
 
+## Discussion
+
+## Conclusion
+
 ### Teaser (10 sec, GIF)
 
 ### Summary (2 mins, video)
 
 ### B-Roll (Extra Footage of Random and Evolved Creatures)
-
-## Further Discussion
-
-## Conclusion
 
 
 ## To run the code:
