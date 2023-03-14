@@ -63,7 +63,7 @@ The world contains some spherical balls on a 3D plane. The world also contains a
 
 Our creatures are made up of cubes of different sizes. Here's the body plan used for generating a typical creature:
 
-![Body Plan](https://github.com/vTheWise/Artificial_Life/blob/randomEvolution/Diagrams/Body_Plan.png?raw=true)
+![Body Plan](https://github.com/vTheWise/Artificial_Life/blob/finalProject/Diagrams/Body_Plan.png?raw=true)
 
 
 #### Sensor Placements
@@ -79,18 +79,18 @@ Motors are placed on the joints of the creatures.
 
 Our creatures contain a brain-like structure consisting of a neural network with sensor and motor neurons.  Here's an illustration of how the brain and body of the creatures interact with each other:
 
-![Brain-Body Control System](https://github.com/vTheWise/Artificial_Life/blob/randomEvolution/Diagrams/Control_System.jpg?raw=true)
+![Brain-Body Control System](https://github.com/vTheWise/Artificial_Life/blob/finalProject/Diagrams/Control_System.jpg?raw=true)
 
 In this network, every sensor neuron is connected with every motor neuron with a synapse having a random weight. Since, we are using a dense/fully-connected layer of neurons, the sensor on one part of the body will also affect the motors on other parts of the body.
 
-![neural network](https://github.com/vTheWise/Artificial_Life/blob/randomEvolution/Diagrams/Brain.jpg?raw=true)
+![neural network](https://github.com/vTheWise/Artificial_Life/blob/finalProject/Diagrams/Brain.jpg?raw=true)
 
 
 #### Creature - Movement
 
 Our creatures possess hinge joints of "revolute" type, each of which allows for free movement in 2 axes. The placement of joints can be better understood with the help of the following diagram: [source](https://docs.google.com/presentation/d/1zvZzFyTf8PBNjzQZx_gZk84aUntZo2bUKhpe78yT4OY/edit#slide=id.g10dad2fba23_2_428)
 
-![Joints Placement](https://github.com/vTheWise/Artificial_Life/blob/randomEvolution/Diagrams/Joints%20Position.png?raw=true)
+![Joints Placement](https://github.com/vTheWise/Artificial_Life/blob/finalProject/Diagrams/Joints%20Position.png?raw=true)
 
 If the link is generated alongside z-axis (direction: [0, 0, 1] or [0, 0, -1]), then the joints on this link can move along the x-y plane. Similarly, if the link is generated alongside y-axis, the movement is allowed along the x-z plane. And, for the links generated alongside x-axis, free movement is allowed along the y-z plane.
 
@@ -117,12 +117,12 @@ Initailly, a population of random creatures is generated. The number of creature
 
  Here's an illustration demonstrating the types of mutations that our creatures can undergo in each generation:
 
-![Mutations](https://github.com/vTheWise/Artificial_Life/blob/randomEvolution/Diagrams/Mutation.jpg?raw=true)
+![Mutations](https://github.com/vTheWise/Artificial_Life/blob/finalProject/Diagrams/Mutation.jpg?raw=true)
 
 
 Here's an illustration of how the evolved creatures differ from the random ones:
 
-![Evolution](https://github.com/vTheWise/Artificial_Life/blob/randomEvolution/Diagrams/Evolution.jpg?raw=true)
+![Evolution](https://github.com/vTheWise/Artificial_Life/blob/finalProject/Diagrams/Evolution.jpg?raw=true)
 
 
 
