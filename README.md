@@ -169,10 +169,10 @@ Here's an illustration of how the evolved creatures differ from the random ones:
 python search.py
 ```
 
-OR 
+**To Generate the Graphs**
 
 ```
-python3 search.py
+python plot_graphs.py
 ```
 
 ## Important Notes
