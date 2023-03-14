@@ -250,6 +250,7 @@ def new_world():
     for sof in sorted_obstacle_fitness:
         y2.append(sof['fitness'])
     fig = plt.figure(facecolor='white')
+    fig.set_size_inches(10, 8.5)
     ax = fig.add_subplot()
     plt.rcParams["font.weight"] = "bold"
     ax.bar(x, y1, color='r')
