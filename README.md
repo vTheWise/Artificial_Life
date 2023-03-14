@@ -63,6 +63,7 @@ The world contains some spherical balls on a 3D plane. The world also contains a
 
 Our creatures are made up of cubes of different sizes. Here's the body plan used for generating a typical creature:
 
+![Body Plan](https://github.com/vTheWise/Artificial_Life/blob/finalProject/Diagrams/Body_Plan.png?raw=true)
 
 #### Sensor Placements
 
