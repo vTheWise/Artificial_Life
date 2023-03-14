@@ -183,6 +183,12 @@ python search.py
 python plot_graphs.py
 ```
 
+**To Simulate the new World**
+
+```
+python new_world_evaluation.py
+```
+
 ## Important Notes
 ```
 * For reproducing the selected results, I have added seed values for both the numpy and random modules that I've been using in the program. These seeds are defined in **constant.py** as numpy_seed and random_seed, respectively. They can be changed before running the program.
