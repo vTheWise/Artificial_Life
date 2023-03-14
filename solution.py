@@ -83,20 +83,20 @@ class SOLUTION:
             pyrosim.Send_Sphere(name="Ball{0}".format(str(i)), pos=ball_pos, size=[1])
             ball_pos = np.add(ball_pos, [-3, 0, 0])
 
-
-        delta_y, delta_z = 1.5, 0.2
-        init_y = c.stair_pos
-        mass = 50.0
-        pyrosim.Send_Cube(name="Box1", pos=[-5, init_y + delta_y * 0.5, delta_z / 2.0], size=[50, delta_y, delta_z],
-                          mass=mass)
-        pyrosim.Send_Cube(name="Box2", pos=[-5, init_y + delta_y * 1.5,  (delta_z * 2) / 2.0],
-                          size=[50, delta_y, delta_z * 2], mass=mass)
-        pyrosim.Send_Cube(name="Box3", pos=[-5, init_y + delta_y * 2.5, (delta_z * 3) / 2.0],
-                          size=[50, delta_y,  delta_z * 3], mass=mass)
-        pyrosim.Send_Cube(name="Box4", pos=[-5, init_y + delta_y * 3.5, (delta_z * 4) / 2.0],
-                          size=[50, delta_y,  delta_z * 4], mass=mass)
-        pyrosim.Send_Cube(name="Box5", pos=[-5, init_y + delta_y * 4.5,  (delta_z * 5) / 2.0],
-                          size=[50, delta_y, delta_z * 5], mass=mass)
+        if c.generate_stairs:
+            delta_y, delta_z = 1.5, 0.2
+            init_y = c.stair_pos
+            mass = 50.0
+            pyrosim.Send_Cube(name="Box1", pos=[-5, init_y + delta_y * 0.5, delta_z / 2.0], size=[50, delta_y, delta_z],
+                              mass=mass)
+            pyrosim.Send_Cube(name="Box2", pos=[-5, init_y + delta_y * 1.5,  (delta_z * 2) / 2.0],
+                              size=[50, delta_y, delta_z * 2], mass=mass)
+            pyrosim.Send_Cube(name="Box3", pos=[-5, init_y + delta_y * 2.5, (delta_z * 3) / 2.0],
+                              size=[50, delta_y,  delta_z * 3], mass=mass)
+            pyrosim.Send_Cube(name="Box4", pos=[-5, init_y + delta_y * 3.5, (delta_z * 4) / 2.0],
+                              size=[50, delta_y,  delta_z * 4], mass=mass)
+            pyrosim.Send_Cube(name="Box5", pos=[-5, init_y + delta_y * 4.5,  (delta_z * 5) / 2.0],
+                              size=[50, delta_y, delta_z * 5], mass=mass)
         pyrosim.End()
 
     def Set_ID(self, nextAvailableID):
