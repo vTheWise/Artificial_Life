@@ -173,6 +173,8 @@ python3 search.py
 ## Important Notes
 ```
 * For reproducing the selected results, I have added seed values for both the numpy and random modules that I've been using in the program. These seeds are defined in **constant.py** as numpy_seed and random_seed, respectively. They can be changed before running the program.
+
+* If you want to generate staircase obstacles, you need to set generate_stairs in constants.py to True. 
 ```
 
 
