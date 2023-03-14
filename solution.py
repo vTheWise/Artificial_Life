@@ -23,7 +23,7 @@ class SOLUTION:
         if self.myID == 0:
             self.Create_World()
 
-    def Start_Simulation(self, directOrGUI, bodyCreated=False):
+    def Start_Simulation(self, directOrGUI, bodyCreated=False, new_world=False):
         if not bodyCreated:
             self.min_limbs = 2
             self.max_limbs = 10
@@ -64,7 +64,7 @@ class SOLUTION:
 
         self.Create_Body(bodyCreated)
         self.Create_Brain()
-        os.system("python3 simulate.py {0} {1} 2&>runLogs.txt &".format(directOrGUI, str(self.myID)))
+        os.system("python3 simulate.py {0} {1} {2} 2&>runLogs.txt &".format(directOrGUI, str(self.myID), new_world))
 
 
     def Wait_For_Simulation_To_End(self):

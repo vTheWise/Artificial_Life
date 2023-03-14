@@ -3,36 +3,39 @@ import matplotlib.pyplot as plt
 import pickle
 import statistics
 from matplotlib import ticker
+import os
+from operator import itemgetter
 
 def main():
-    directory_normal = "saved_fitness/normal/"
-    directory_obstacles = "saved_fitness/obstacles/"
-    normal_files, obstacle_files = get_KV_pairs()
-    normal_fitness = []
-    obstacle_fitness = []
-    for file in normal_files:
-        with (open("{0}{1}".format(directory_normal, file["filename"]), "rb")) as openfile:
-            while True:
-                try:
-                    fitnessValues = pickle.load(openfile)
-                    normal_fitness.append({"filename": file["filename"], "random_seed": file["random_seed"],
-                                           "numpy_seed": file["numpy_seed"],
-                                           "fitnessValues": fitnessValues[:c.numberOfGenerations*c.populationSize]})
-                except EOFError:
-                    break
-        openfile.close()
-    for file in obstacle_files:
-        with (open("{0}{1}".format(directory_obstacles, file["filename"]), "rb")) as openfile:
-            while True:
-                try:
-                    fitnessValues = pickle.load(openfile)
-                    obstacle_fitness.append({"filename": file["filename"], "random_seed": file["random_seed"],
-                                           "numpy_seed": file["numpy_seed"],
-                                             "fitnessValues": fitnessValues[:c.numberOfGenerations*c.populationSize]})
-                except EOFError:
-                    break
-        openfile.close()
-    generate_plot(normal_fitness, obstacle_fitness)
+    # directory_normal = "saved_fitness/normal/"
+    # directory_obstacles = "saved_fitness/obstacles/"
+    # normal_files, obstacle_files = get_KV_pairs()
+    # normal_fitness = []
+    # obstacle_fitness = []
+    # for file in normal_files:
+    #     with (open("{0}{1}".format(directory_normal, file["filename"]), "rb")) as openfile:
+    #         while True:
+    #             try:
+    #                 fitnessValues = pickle.load(openfile)
+    #                 normal_fitness.append({"filename": file["filename"], "random_seed": file["random_seed"],
+    #                                        "numpy_seed": file["numpy_seed"],
+    #                                        "fitnessValues": fitnessValues[:c.numberOfGenerations*c.populationSize]})
+    #             except EOFError:
+    #                 break
+    #     openfile.close()
+    # for file in obstacle_files:
+    #     with (open("{0}{1}".format(directory_obstacles, file["filename"]), "rb")) as openfile:
+    #         while True:
+    #             try:
+    #                 fitnessValues = pickle.load(openfile)
+    #                 obstacle_fitness.append({"filename": file["filename"], "random_seed": file["random_seed"],
+    #                                        "numpy_seed": file["numpy_seed"],
+    #                                          "fitnessValues": fitnessValues[:c.numberOfGenerations*c.populationSize]})
+    #             except EOFError:
+    #                 break
+    #     openfile.close()
+    # generate_plot(normal_fitness, obstacle_fitness)
+    new_world()
 
 def get_KV_pairs():
     normal_files =  [
@@ -206,6 +209,60 @@ def get_plot_style(plot_num):
     elif plot_num == 5:
         plot_style = 'b.-'
     return plot_style
+
+def new_world():
+    directory_normal = "new_world/normal/"
+    directory_obstacles = "new_world/obstacles/"
+    normal_fitness = []
+    obstacle_fitness = []
+    for root, dirs, files in os.walk(directory_normal):
+        for file_ in files:
+            if '.pkl' in file_:
+                with (open(os.path.join(root, file_), "rb")) as openfile:
+                    while True:
+                        try:
+                            fitness = pickle.load(openfile)
+                            normal_fitness.append({"file": file_, "fitness": fitness})
+                        except EOFError:
+                            break
+                openfile.close()
+
+    for root, dirs, files in os.walk(directory_obstacles):
+        for file_ in files:
+            if '.pkl' in file_:
+                with (open(os.path.join(root, file_), "rb")) as openfile:
+                    while True:
+                        try:
+                            fitness = pickle.load(openfile)
+                            obstacle_fitness.append({"file": file_, "fitness": fitness})
+                        except EOFError:
+                            break
+                openfile.close()
+
+    sorted_normal_fitness = sorted(normal_fitness, key=itemgetter('file'))
+    sorted_obstacle_fitness = sorted(obstacle_fitness, key=itemgetter('file'))
+    x = []
+    y1 = []
+    y2 = []
+    for idx, snf in enumerate(sorted_normal_fitness):
+        x.append('Creature{0}'.format(str(idx+1)))
+        y1.append(snf['fitness'])
+    for sof in sorted_obstacle_fitness:
+        y2.append(sof['fitness'])
+    fig = plt.figure(facecolor='white')
+    ax = fig.add_subplot()
+    plt.rcParams["font.weight"] = "bold"
+    ax.bar(x, y1, color='r')
+    ax.bar(x, y2, bottom=y1, color='b')
+    for container in ax.containers:
+        ax.bar_label(container, fmt="%.2f", label_type='center', color='white', fontsize=10)
+    plt.xlabel("Creatures")
+    plt.ylabel("Fitness in New World")
+    plt.legend(["Creature Evolved without Obstacles", "Creature Evolved with Obstacles"], loc='upper left',
+               bbox_to_anchor=(0, 1), fancybox=True, shadow=True)
+    plt.title('Fitness Curve (Fitness: {0})\nNew World'.format(c.fitness_new_world))
+    plt.savefig('Diagrams/new_world_evaluate')
+    plt.show()
 
 if __name__ == "__main__":
     main()

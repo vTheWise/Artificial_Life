@@ -55,15 +55,17 @@ class ROBOT:
     def __dist(self, pos1, pos2):
         return np.sqrt((pos1[0] - pos2[0]) ** 2 + (pos1[1] - pos2[1]) ** 2 + (pos1[2] - pos2[2]) ** 2)
 
-    def Get_Fitness(self, ballId):
+    def Get_Fitness(self, ballId, new_world=False):
         basePositionAndOrientation = p.getBasePositionAndOrientation(self.robotId)
         basePosition = basePositionAndOrientation[0]
+        if new_world:
+            dist1 = - self.__dist([0, 0, 0], basePosition)
+        else:
+            ball_orientation = p.getBasePositionAndOrientation(ballId)
+            ball_position = ball_orientation[0]
 
-        ball_orientation = p.getBasePositionAndOrientation(ballId)
-        ball_position = ball_orientation[0]
-
-        # distance from the ball
-        dist1 = self.__dist(ball_position, basePosition)
+            # distance from the ball
+            dist1 = self.__dist(ball_position, basePosition)
 
         with open('data/tmp{0}.txt'.format(str(self.solutionID)), 'w') as f:
             f.write(str(-1 * dist1))

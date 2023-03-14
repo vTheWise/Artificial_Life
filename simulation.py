@@ -7,8 +7,9 @@ import time
 
 class SIMULATION:
 
-    def __init__(self, directOrGUI, solutionID):
+    def __init__(self, directOrGUI, solutionID, new_world=False):
         self.directOrGUI = directOrGUI
+        self.new_world = new_world
         try:
             if directOrGUI == 'DIRECT':
                 self.physicsClient = p.connect(p.DIRECT)
@@ -30,6 +31,8 @@ class SIMULATION:
 
     def Run(self):
         for t in range(c.forLoopIteratorCount):
+            basePos, baseOrn = p.getBasePositionAndOrientation(self.robot.robotId)
+            p.resetDebugVisualizerCamera(cameraDistance=10, cameraYaw=15, cameraPitch=-30, cameraTargetPosition=basePos)
             p.stepSimulation()
             self.robot.Sense(t)
             self.robot.Think()
@@ -38,7 +41,7 @@ class SIMULATION:
                 time.sleep(c.sleepTime)
 
     def Get_Fitness(self):
-        self.robot.Get_Fitness(self.world.ballId[0])
+        self.robot.Get_Fitness(self.world.ballId[0], self.new_world)
 
     def __del__(self):
         p.disconnect()

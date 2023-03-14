@@ -83,6 +83,7 @@ class PARALLEL_HILL_CLIMBER:
         with open(filename, 'wb') as f:
             pickle.dump(best_solution, f)
             f.close()
+        best_solution.Wait_For_Simulation_To_End()
 
     def Evaluate(self, solutions, generation):
         display_idx = random.choices(range(c.populationSize), k=c.num_simulation_initial_popluation)
