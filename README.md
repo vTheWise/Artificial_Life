@@ -2,7 +2,7 @@
 
 ## [Teaser (10 sec, GIF)](https://youtu.be/e8kVbk1koMA)
 
-![Teaser](https://github.com/vTheWise/Artificial_Life/blob/finalProject/Diagrams/teaser.gif?raw=true)
+![Teaser](https://github.com/vTheWise/Artificial_Life/blob/main/Diagrams/teaser.gif?raw=true)
 
 ## Summary (2 mins, video)
 ### [YouTube Video](https://youtu.be/cxVyn95cWYo)
@@ -18,21 +18,21 @@ Christopher Langton defines artificial life as 'The study of natural life, where
 
 One biological theorem, postulated by R. A. Fisher, conjectured that evolution proceeded by steady improvements in fitness. This is an equivalent to the so-called hill climbing technique used by certain computer optimization procedures, such as learning in neural network simulations. Because each generation was supposedly slightly fitter than the previous one, a graph illustrating this progress would show line angling upward, as though the fitness of the species were engaged in scaling a peak. 
 
-![Evolutionary Hill Climbing](https://github.com/vTheWise/Artificial_Life/blob/finalProject/Diagrams/hill_climbing.png?raw=true)
+![Evolutionary Hill Climbing](https://github.com/vTheWise/Artificial_Life/blob/main/Diagrams/hill_climbing.png?raw=true)
 
 
 Biologists studying the problem had created a more complicated, multidimensional map of the way that a species might evolve. This “adaptive landscape,”’ first postulated by Sewall Wright, represented the space of all possible genetic combinations. It was filled with bumps, peaks, valleys, and spikes. The gene pool of an entire population resided at a single area on this landscape. The higher the ground, the fitter the population would be if it found its way there. When the terrain was fairly level, a population theoretically engaged in a “random walk,”’ with the effects of crossover and mutation moving its genetic composition to different places, until it found an ascending plane. From that point, the more fit individuals within the population would push fitness higher, and the rest of the population would follow. 
 
 But, if hill climbing was indeed the method nature used to achieve higher fitness, the discovery of the highest ground could not always be assumed. Once the population scaled a medium-size peak, it tended to get stuck. This was due to the built-in reluctance of a population to decrease its fitness, which would be necessary in order to search the landscape for an even higher peak. The population would remain fat and happy on its hill but miss out on the mountains that lay somewhere else on the chart. The population was then “stuck on a local maximum” with no incentive to make the giant evolutionary leaps that push life toward more complexity.
 
-![Local Maxima](https://github.com/vTheWise/Artificial_Life/blob/finalProject/Diagrams/local_optima.png?raw=true)
+![Local Maxima](https://github.com/vTheWise/Artificial_Life/blob/main/Diagrams/local_optima.png?raw=true)
 
 “If evolution is a hill-climbing technique, why doesn’t it seem to have problems that we know hill-climbing techniques suffer from?” ‘‘Why is evolution so much more powerful than any other hill-climbing technique? Why is it able to evolve much more complicated things?”
 
 One possible explanation can be given in terms of ‘‘evolutionary arms races" -  a situation where two populations of differing species were set against each other, in predator-prey or host-parasite relationships. If a host population Evolved strategic traits to foil the parasite, the parasite would in turn evolve a strategy to compensate and the cycle would continue causing continuous improvements (i.e., evolution!). William Hamilton, among others, had suggested that the presence of parasites might have been integral in accelerating the pace of evolution to a rate capable of yielding its present diversity and complexity.
 
 
-![Coevolution](https://github.com/vTheWise/Artificial_Life/blob/finalProject/Diagrams/coevolution.jpg?raw=true)
+![Coevolution](https://github.com/vTheWise/Artificial_Life/blob/main/Diagrams/coevolution.jpg?raw=true)
 
 **This chain of thoughts led me to question the role of environmental hardships in shaping the path of evolution. I wondered if the creatures who have to face harsh environmental conditions evolve better than those who do not.**
 
@@ -55,7 +55,7 @@ H': Harsh environmental conditions do have positive impact on the evolutionary p
 
 In order to test my hypothesis, I followed a controlled testing set-up. I first ran an evolutionary search (PHC - details are mentioned below) for 500 generations with a population size of 10. The environment was plain and simple without any obstacles. The fitness objective for the creatures was to go as close to the balls as possible. I ran this evolutionary process 5 times using a different random seed each time. I saved the best creatures from every run (the corresponding pickle files are available in the **saved_creatures** folder. Next, keeping everything exactly the same, I ran the evolutionary process for another set of 5 times (the random seeds were the same that I used for the previous 5 runs). The only difference this time was that there was an obstacle in the shape of staircases between the creatures and the balls. This can. be seen as a control-group for testing my hypothesis. The creatures were supposed to learn how to reach to the balls avoiding/climbing the obstacle. Again I saved the best creatures from each run. Finally, I created a new world/environment with different kinds of obstacles in it and tested the saved best creatures from the original experiment as well as the control-group experiment for the distance that they traveled in the new world. The results are presented below followed by a short discussion. 
 
-![Method](https://github.com/vTheWise/Artificial_Life/blob/finalProject/Diagrams/method.jpg?raw=true)
+![Method](https://github.com/vTheWise/Artificial_Life/blob/main/Diagrams/method.jpg?raw=true)
 
 ## An Introduction to Our Simulated World and its Creatures
 
@@ -68,11 +68,11 @@ The world contains some spherical balls on a 3D plane. The world also contains a
 
 Our creatures are made up of cubes of different sizes. Here's the body plan used for generating a typical creature:
 
-![Body Plan](https://github.com/vTheWise/Artificial_Life/blob/finalProject/Diagrams/Body_Plan.png?raw=true)
+![Body Plan](https://github.com/vTheWise/Artificial_Life/blob/main/Diagrams/Body_Plan.png?raw=true)
 
 It's difficult to imagine all types of possible creature bodies, since our program randomly generates the morphologies. However, the following diagram captures the essence of the genotype of our creatures:
 
-![Body](https://github.com/vTheWise/Artificial_Life/blob/finalProject/Diagrams/body.jpg?raw=true)
+![Body](https://github.com/vTheWise/Artificial_Life/blob/main/Diagrams/body.jpg?raw=true)
 
 
 ### Sensor Placements
@@ -88,18 +88,18 @@ Motors are placed on the joints of the creatures.
 
 Our creatures contain a brain-like structure consisting of a neural network with sensor and motor neurons.  Here's an illustration of how the brain and body of the creatures interact with each other:
 
-![Brain-Body Control System](https://github.com/vTheWise/Artificial_Life/blob/finalProject/Diagrams/Control_System.jpg?raw=true)
+![Brain-Body Control System](https://github.com/vTheWise/Artificial_Life/blob/main/Diagrams/Control_System.jpg?raw=true)
 
 In this network, every sensor neuron is connected with every motor neuron with a synapse having a random weight. Since, we are using a dense/fully-connected layer of neurons, the sensor on one part of the body will also affect the motors on other parts of the body.
 
-![neural network](https://github.com/vTheWise/Artificial_Life/blob/finalProject/Diagrams/Brain.jpg?raw=true)
+![neural network](https://github.com/vTheWise/Artificial_Life/blob/main/Diagrams/Brain.jpg?raw=true)
 
 
 ### Creature - Movement
 
 Our creatures possess hinge joints of "revolute" type, each of which allows for free movement in 2 axes. The placement of joints can be better understood with the help of the following diagram: [source](https://docs.google.com/presentation/d/1zvZzFyTf8PBNjzQZx_gZk84aUntZo2bUKhpe78yT4OY/edit#slide=id.g10dad2fba23_2_428)
 
-![Joints Placement](https://github.com/vTheWise/Artificial_Life/blob/finalProject/Diagrams/Joints%20Position.png?raw=true)
+![Joints Placement](https://github.com/vTheWise/Artificial_Life/blob/main/Diagrams/Joints%20Position.png?raw=true)
 
 If the link is generated alongside z-axis (direction: [0, 0, 1] or [0, 0, -1]), then the joints on this link can move along the x-y plane. Similarly, if the link is generated alongside y-axis, the movement is allowed along the x-z plane. And, for the links generated alongside x-axis, free movement is allowed along the y-z plane.
 
@@ -116,21 +116,21 @@ The best creatures in the population are searched with the help of parallel hill
 
 Here's a flow diagram depicting different stages:
 
-![PHC](https://github.com/vTheWise/Artificial_Life/blob/finalProject/Diagrams/phc.jpg?raw=true)
+![PHC](https://github.com/vTheWise/Artificial_Life/blob/main/Diagrams/phc.jpg?raw=true)
 
 Initailly, a population of random creatures is generated. The number of creatures in the population is defined in constants.py as **populationSize**. A parallel hill climbing algorithm is used for evolving the creatures through multiple generations. The number of generations is defined in constants.py as **numberOfGenerations**. The creatures undergo a series of spawning, mutation, evaluation, and selection processes and the best creatures in each generation are selected as parents for reproducing in the next generation. During each generation, creatures are selected by a direct comparison with their respective parent. Other creatures in the population do not affect the selection process directly. The selection process can be understood with the help of the following diagram:
 
-![Selection](https://github.com/vTheWise/Artificial_Life/blob/finalProject/Diagrams/selection.jpg?raw=true)
+![Selection](https://github.com/vTheWise/Artificial_Life/blob/main/Diagrams/selection.jpg?raw=true)
 
 
  Here's an illustration demonstrating the types of mutations that our creatures can undergo in each generation:
 
-![Mutations](https://github.com/vTheWise/Artificial_Life/blob/finalProject/Diagrams/Mutation.jpg?raw=true)
+![Mutations](https://github.com/vTheWise/Artificial_Life/blob/main/Diagrams/Mutation.jpg?raw=true)
 
 
 Here's an illustration of how the evolved creatures differ from the random ones:
 
-![Evolution](https://github.com/vTheWise/Artificial_Life/blob/finalProject/Diagrams/Evolution.jpg?raw=true)
+![Evolution](https://github.com/vTheWise/Artificial_Life/blob/main/Diagrams/Evolution.jpg?raw=true)
 
 
 
@@ -140,15 +140,15 @@ Here's an illustration of how the evolved creatures differ from the random ones:
 
 Best fitness in each generation:
 
-![best fitness](https://github.com/vTheWise/Artificial_Life/blob/finalProject/Diagrams/fitness_curve_best.png?raw=true)
+![best fitness](https://github.com/vTheWise/Artificial_Life/blob/main/Diagrams/fitness_curve_best.png?raw=true)
 
 Average fitness in each generation:
 
-![avg fitness](https://github.com/vTheWise/Artificial_Life/blob/finalProject/Diagrams/fitness_curve_avg.png?raw=true)
+![avg fitness](https://github.com/vTheWise/Artificial_Life/blob/main/Diagrams/fitness_curve_avg.png?raw=true)
 
 Fitness in the new world:
 
-![new world fitness](https://github.com/vTheWise/Artificial_Life/blob/finalProject/Diagrams/new_world_evaluate.png?raw=true)
+![new world fitness](https://github.com/vTheWise/Artificial_Life/blob/main/Diagrams/new_world_evaluate.png?raw=true)
 
 
 ## Discussion
