@@ -1,6 +1,6 @@
 # Artificial Life
 
-## Teaser (10 sec, GIF)
+## [Teaser (10 sec, GIF)](https://youtu.be/e8kVbk1koMA)
 
 ![Teaser](https://github.com/vTheWise/Artificial_Life/blob/finalProject/Diagrams/teaser.gif?raw=true)
 
