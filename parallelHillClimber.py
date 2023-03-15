@@ -2,12 +2,8 @@ from solution import SOLUTION
 import constants as c
 import copy
 import os
-import matplotlib.pyplot as plt
 import random
-from matplotlib import ticker
-import numpy as np
-import statistics
-from itertools import chain
+import pickle
 
 
 random.seed(c.random_seed)
@@ -67,36 +63,12 @@ class PARALLEL_HILL_CLIMBER:
 
     def Plot_Fitness(self):
         if self.fitnessValues:
-            generations = [i for i in range(c.numberOfGenerations)]
-            fig, ax = plt.subplots(1, 1)
-            fig.set_size_inches(20, 10)
-            fitness_for_generation = []
-            best_fitness_values = []
-            avg_fitness_values = []
-            population = 0
-            for idx in range (len(self.fitnessValues)):
-                fitness_for_generation.append(self.fitnessValues[idx])
-                population += 1
-                if population == c.populationSize:
-                    best_fitness_values.append(max(fitness_for_generation))
-                    avg_fitness_values.append(statistics.fmean(fitness_for_generation))
-                    population = 0
-
-            ax.plot(generations, best_fitness_values[:c.numberOfGenerations], 'go-', label='Best fitness values')
-            ax.plot(generations, avg_fitness_values[:c.numberOfGenerations], 'ro-', label='Average fitness values')
-            ax.set_title('Fitness Curve (Fitness: {0})'.format(c.fitnessFunction))
-            ax.legend(loc='upper left')
-            ax.set_xlabel("Generations")
-            ax.set_ylabel("Fitness Values")
-            plt.suptitle('random.seed = {0}\nnumpy.random.seed = {1}'.format(c.random_seed, c.numpy_seed))
-            plt.ylim(min(chain(best_fitness_values[:c.numberOfGenerations], avg_fitness_values[:c.numberOfGenerations]))-1,
-                         max(chain(best_fitness_values[:c.numberOfGenerations], avg_fitness_values[:c.numberOfGenerations]))+1)
-            plt.yticks(np.arange(min(chain(best_fitness_values[:c.numberOfGenerations], avg_fitness_values[:c.numberOfGenerations]))-1.0,
-                                 max(chain(best_fitness_values[:c.numberOfGenerations], avg_fitness_values[:c.numberOfGenerations]))+1.0, 0.5))
-            ax.yaxis.set_major_formatter(ticker.StrMethodFormatter("{x:.2f}"))
-            plt.show()
-            plt.savefig('fitnessCurve.png')
-            plt.close(fig)
+            filename = 'data/fitnessValuesObstacles{0}_{1}.pkl'.format(str(c.random_seed), str(c.numpy_seed)) \
+                if c.generate_stairs \
+                else 'data/fitnessValues{0}_{1}.pkl'.format(str(c.random_seed), str(c.numpy_seed))
+            with open(filename, 'wb') as f:
+                pickle.dump(self.fitnessValues, f)
+                f.close()
 
     def Show_Best(self):
         best_solution = self.parents[0]
@@ -105,6 +77,13 @@ class PARALLEL_HILL_CLIMBER:
                 if self.parents[k].fitness > best_solution.fitness:
                     best_solution = self.parents[k]
         best_solution.Start_Simulation("GUI", bodyCreated=True)
+        filename = 'data/fitnessValuesObstacles{0}_{1}_best.pkl'.format(str(c.random_seed), str(c.numpy_seed)) \
+            if c.generate_stairs \
+            else 'data/fitnessValues{0}_{1}_best.pkl'.format(str(c.random_seed), str(c.numpy_seed))
+        with open(filename, 'wb') as f:
+            pickle.dump(best_solution, f)
+            f.close()
+        best_solution.Wait_For_Simulation_To_End()
 
     def Evaluate(self, solutions, generation):
         display_idx = random.choices(range(c.populationSize), k=c.num_simulation_initial_popluation)

@@ -6,13 +6,20 @@ from pyrosim.neuralNetwork import NEURAL_NETWORK
 import os
 import constants as c
 import numpy as np
+import random
+
+#region File Attributes
+# set random seeds
+random.seed(c.random_seed)
+np.random.seed(c.numpy_seed)
+#endregion File Attributes
 
 class ROBOT:
 
     def __init__(self, solutionID):
         self.solutionID = solutionID
         self.motors = dict()
-        self.robotId = p.loadURDF("data/body{0}.urdf".format(str(self.solutionID)))
+        self.robotId = p.loadURDF("data/body{0}.urdf".format(str(self.solutionID)), flags=p.URDF_USE_SELF_COLLISION)
         pyrosim.Prepare_To_Simulate(self.robotId)
         self.nn = NEURAL_NETWORK("data/brain{0}.nndf".format(str(self.solutionID)))
         self.Prepare_To_Sense()
@@ -46,19 +53,22 @@ class ROBOT:
         self.nn.Update()
 
     def __dist(self, pos1, pos2):
-        return np.sqrt((pos1[0] - pos2[0]) ** 2 + (pos1[1] - pos2[1]) ** 2)
+        return np.sqrt((pos1[0] - pos2[0]) ** 2 + (pos1[1] - pos2[1]) ** 2 + (pos1[2] - pos2[2]) ** 2)
 
-    def Get_Fitness(self, ballId):
+    def Get_Fitness(self, ballId, new_world=False):
         basePositionAndOrientation = p.getBasePositionAndOrientation(self.robotId)
         basePosition = basePositionAndOrientation[0]
+        if new_world:
+            dist1 = - self.__dist([0, 0, 0], basePosition)
+        else:
+            ball_orientation = p.getBasePositionAndOrientation(ballId)
+            ball_position = ball_orientation[0]
 
-        ball_orientation = p.getBasePositionAndOrientation(ballId)
-        ball_position = ball_orientation[0]
-
-        dist = self.__dist(ball_position, basePosition)
+            # distance from the ball
+            dist1 = self.__dist(ball_position, basePosition)
 
         with open('data/tmp{0}.txt'.format(str(self.solutionID)), 'w') as f:
-            f.write(str(-1 * dist))
+            f.write(str(-1 * dist1))
             f.close()
         os.system("mv data/tmp{0}.txt data/fitness{0}.txt".format(str(self.solutionID)))
 
