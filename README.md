@@ -5,8 +5,7 @@
 ![Teaser](https://github.com/vTheWise/Artificial_Life/blob/finalProject/Diagrams/teaser.gif?raw=true)
 
 ## Summary (2 mins, video)
-
-## B-Roll (Extra Footage of Random and Evolved Creatures)
+### [YouTube Video](https://youtu.be/cxVyn95cWYo)
 
 ## Background
 
