@@ -110,7 +110,7 @@ If the link is generated alongside z-axis (direction: [0, 0, 1] or [0, 0, -1]), 
 
 ### Evolution (Parallel Hill Climbing)
 
-he objective of the fitness function is to evolve locomotive capabilities in the creature in a manner that they try to chase some balls present in the 3D world. Creatures try to obtain this objective by minimizing the Euclidean distance between the ball and themselves. Let's say the position of a creature is pos1: [x1, y1, z1] and the position of the ball is pos2: [x2, y2, z2], then the distance between the two can be calculated using Euclidean method:
+The objective of the fitness function is to evolve locomotive capabilities in the creature in a manner that they try to chase some balls present in the 3D world. Creatures try to obtain this objective by minimizing the Euclidean distance between the ball and themselves. Let's say the position of a creature is pos1: [x1, y1, z1] and the position of the ball is pos2: [x2, y2, z2], then the distance between the two can be calculated using Euclidean method:
 
 ```
 numpy.sqrt((pos1[0] - pos2[0]) ** 2 + (pos1[1] - pos2[1]) ** 2 + (pos1[2] - pos2[2]) ** 2)
